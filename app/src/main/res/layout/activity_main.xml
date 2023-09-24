@@ -54,7 +54,6 @@
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
-
                 app:cardBackgroundColor="@color/black"
                 app:cardCornerRadius="1dp"
                 app:cardElevation="2dp"
