@@ -54,7 +54,7 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Estudiante"
+            android:text="Colaborador"
             android:textAlignment="center"
             android:textSize="26sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +98,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/icon_background"
                         android:padding="5dp"
-                        app:srcCompat="@drawable/studentlogo" />
+                        app:srcCompat="@drawable/colablogo" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -110,11 +110,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Carnet"
+                            android:text="Username"
                             android:textColor="#858585" />
 
                         <EditText
-                            android:id="@+id/carnet"
+                            android:id="@+id/username"
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
                             android:ems="8"

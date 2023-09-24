@@ -45,7 +45,6 @@
             android:rowCount="2">
 
 
-
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,6 +53,7 @@
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
+                android:onClick="estudiante"
                 app:cardBackgroundColor="@color/black"
                 app:cardCornerRadius="1dp"
                 app:cardElevation="2dp"
@@ -97,6 +97,7 @@
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
 
+                android:onClick="colaborador"
                 app:cardBackgroundColor="@color/black"
                 app:cardCornerRadius="1dp"
                 app:cardElevation="2dp"
@@ -138,6 +139,7 @@
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
+                android:onClick="asocia"
                 app:cardBackgroundColor="@color/black"
                 app:cardCornerRadius="1dp"
                 app:cardElevation="2dp"
@@ -180,6 +182,7 @@
             android:layout_height="49dp"
             android:background="@drawable/button_background"
             android:gravity="center"
+            android:onClick="login"
             android:text="Iniciar sesión"
             android:textAlignment="center"
             android:textColor="@color/white"
