@@ -30,4 +30,10 @@ public class Login extends AppCompatActivity {
         siguiente.putExtra("userType", currentUserType);
         startActivity(siguiente);
     }
+
+    public void continuar(View view){
+        Intent siguiente = new Intent(this, Events.class);
+        siguiente.putExtra("userType", currentUserType);
+        startActivity(siguiente);
+    }
 }

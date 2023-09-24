@@ -29,6 +29,7 @@
             android:layout_marginTop="32dp"
             android:background="@drawable/button_background"
             android:gravity="center"
+            android:onClick="continuar"
             android:text="Iniciar sesión"
             android:textAlignment="center"
             android:textColor="@color/white"
