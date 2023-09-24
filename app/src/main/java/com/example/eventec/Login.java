@@ -2,9 +2,11 @@ package com.example.eventec;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
-public class login extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private int currentUserType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,10 @@ public class login extends AppCompatActivity {
                 setContentView(R.layout.activity_login_e);
         }
 
-
+    }
+    public void registro (View view){
+        Intent siguiente = new Intent(this, Registro.class);
+        siguiente.putExtra("userType", currentUserType);
+        startActivity(siguiente);
     }
 }

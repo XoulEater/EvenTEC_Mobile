@@ -16,10 +16,10 @@
             android:name=".Perfil"
             android:exported="false" />
         <activity
-            android:name=".RegistroE"
+            android:name=".Registro"
             android:exported="false" />
         <activity
-            android:name=".login"
+            android:name=".Login"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
