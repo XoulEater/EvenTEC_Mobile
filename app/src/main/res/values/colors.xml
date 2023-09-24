@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#690000</color>
     <color name="black">#FF000000</color>
     <color name="darkGrey">#858585</color>
     <color name="tab_indicator_color">#0094FF</color>
