@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    tools:context=".Events">
+    tools:context=".MainScreen">
 
     <TextView
         android:id="@+id/textView4"
@@ -60,18 +60,19 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crear" />
+            android:text="Avisos" />
 
         <com.google.android.material.tabs.TabItem
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Avisos" />
+            android:text="Crear" />
 
 
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"

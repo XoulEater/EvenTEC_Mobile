@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.view.View;
 
 
-public class MainActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
 
     private int currentOption = 0;
     private CardView cardViewEstudiante;
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_start);
 
         cardViewEstudiante = findViewById(R.id.cardView1);
         cardViewColaborador = findViewById(R.id.cardView2);

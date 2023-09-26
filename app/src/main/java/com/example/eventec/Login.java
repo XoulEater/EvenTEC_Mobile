@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void continuar(View view){
-        Intent siguiente = new Intent(this, Events.class);
+        Intent siguiente = new Intent(this, MainScreen.class);
         siguiente.putExtra("userType", currentUserType);
         startActivity(siguiente);
     }
