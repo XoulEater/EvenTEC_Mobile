@@ -1,8 +1,10 @@
-package com.example.eventec;
+package com.example.eventec.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.eventec.R;
 
 public class Registro extends AppCompatActivity {
     private int currentUserType;

@@ -1,4 +1,4 @@
-package com.example.eventec;
+package com.example.eventec.entities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -13,19 +13,19 @@
         android:theme="@style/Theme.EvenTEC"
         tools:targetApi="31">
         <activity
-            android:name=".MainScreen"
+            android:name=".activities.MainScreen"
             android:exported="false" />
         <activity
-            android:name=".Perfil"
+            android:name=".activities.Perfil"
             android:exported="false" />
         <activity
-            android:name=".Registro"
+            android:name=".activities.Registro"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".activities.Login"
             android:exported="false" />
         <activity
-            android:name=".StartActivity"
+            android:name=".activities.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
