@@ -3,6 +3,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#690000</color>
     <color name="black">#FF000000</color>
+    <color name="black50">#80000000</color>
     <color name="darkGrey">#858585</color>
     <color name="tab_indicator_color">#0094FF</color>
     <color name="tab_indicator_color_accent">#140094FF</color>
