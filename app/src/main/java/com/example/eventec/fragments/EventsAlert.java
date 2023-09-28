@@ -13,7 +13,6 @@ import com.example.eventec.R;
 
 public class EventsAlert extends Fragment {
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

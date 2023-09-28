@@ -26,6 +26,8 @@ public class EventsDisplay extends Fragment {
         RecyclerView eventRV = view.findViewById(R.id.RVEvents);
 
         ArrayList<EventModel> eventModelArrayList = new ArrayList<EventModel>();
+
+        eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.des));
         eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.des));
 
         EventAdapter eventAdapter = new EventAdapter(requireContext(), eventModelArrayList);

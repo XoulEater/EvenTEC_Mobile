@@ -50,7 +50,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
             public void onClick(View view) {
                 Toast.makeText(context, model.getEventName(), Toast.LENGTH_SHORT).show();
             }
-        }) ;
+        });
 
     }
 
@@ -72,9 +72,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
             super(itemView);
             eventImageIV = itemView.findViewById(R.id.eventImage);
             eventTitleTV = itemView.findViewById(R.id.eventTitle);
-            dateTV = itemView.findViewById(R.id.asoName);
+            dateTV = itemView.findViewById(R.id.date);
             capacityTV = itemView.findViewById(R.id.capacity);
-            asoNameTV = itemView.findViewById(R.id.date);
+            asoNameTV = itemView.findViewById(R.id.asoName);
         }
     }
 }
