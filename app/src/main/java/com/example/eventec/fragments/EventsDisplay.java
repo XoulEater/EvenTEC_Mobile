@@ -27,8 +27,8 @@ public class EventsDisplay extends Fragment {
 
         ArrayList<EventModel> eventModelArrayList = new ArrayList<EventModel>();
 
-        eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.des));
-        eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.des));
+        eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.no_image));
+        eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.no_image));
 
         EventAdapter eventAdapter = new EventAdapter(requireContext(), eventModelArrayList);
 

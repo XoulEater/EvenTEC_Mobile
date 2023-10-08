@@ -6,6 +6,8 @@ import androidx.cardview.widget.CardView;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.eventec.R;
 
@@ -14,8 +16,12 @@ public class StartActivity extends AppCompatActivity {
 
     private int currentOption = 0;
     private CardView cardViewEstudiante;
-    private CardView cardViewColaborador;
     private CardView cardViewAsociacion;
+    private LinearLayout layoutEstudiante;
+    private LinearLayout layoutAsociacion;
+
+    private ImageView ivEstudiante;
+    private ImageView ivAsociacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,46 +29,38 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         cardViewEstudiante = findViewById(R.id.cardView1);
-        cardViewColaborador = findViewById(R.id.cardView2);
         cardViewAsociacion = findViewById(R.id.cardView3);
+
+        layoutEstudiante = findViewById(R.id.linearLayout1);
+        layoutAsociacion = findViewById(R.id.linearLayout3);
+
+        ivEstudiante = findViewById(R.id.imageView1);
+        ivAsociacion = findViewById(R.id.imageView3);
+
 
         cardViewEstudiante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 currentOption = 0;
-                updateCardViewSelection(cardViewEstudiante, true);
-                updateCardViewSelection(cardViewColaborador, false);
-                updateCardViewSelection(cardViewAsociacion, false);
-            }
-        });
-        cardViewColaborador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                currentOption = 1;
-                updateCardViewSelection(cardViewEstudiante, false);
-                updateCardViewSelection(cardViewColaborador, true);
-                updateCardViewSelection(cardViewAsociacion, false);
+                layoutEstudiante.setBackgroundResource(R.drawable.card_background);
+                ivEstudiante.setImageResource(R.drawable.studentlogoaccent);
+                layoutAsociacion.setBackgroundResource(R.color.black);
+                ivAsociacion.setImageResource(R.drawable.asologo);
             }
         });
         cardViewAsociacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 currentOption = 2;
-                updateCardViewSelection(cardViewEstudiante, false);
-                updateCardViewSelection(cardViewColaborador, false);
-                updateCardViewSelection(cardViewAsociacion, true);            }
+                layoutAsociacion.setBackgroundResource(R.drawable.card_background);
+                ivAsociacion.setImageResource(R.drawable.asologoaccent);
+                layoutEstudiante.setBackgroundResource(R.color.black);
+                ivEstudiante.setImageResource(R.drawable.studentlogo);
+            }
         });
     }
 
-    private void updateCardViewSelection(CardView cardView, boolean selected) {
-        if (selected) {
-            cardView.setCardBackgroundColor(getResources().getColor(R.color.darkGrey));
-            // Realiza cualquier otra acción que desees cuando se selecciona el CardView
-        } else {
-            cardView.setCardBackgroundColor(getResources().getColor(R.color.black));
-            // Realiza cualquier otra acción que desees cuando se deselecciona el CardView
-        }
-    }
+
 
     public void login (View view){
         Intent siguiente = new Intent(this, Login.class);
