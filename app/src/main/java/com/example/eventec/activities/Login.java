@@ -33,6 +33,8 @@ public class Login extends AppCompatActivity {
         startActivity(siguiente);
     }
 
+    // Función que valida con Firebase.
+
     public void continuar(View view){
         Intent siguiente = new Intent(this, MainScreen.class);
         siguiente.putExtra("userType", currentUserType);

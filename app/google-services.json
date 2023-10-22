@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "631910424274",
+    "firebase_url": "https://eventec-f9ff1-default-rtdb.firebaseio.com",
+    "project_id": "eventec-f9ff1",
+    "storage_bucket": "eventec-f9ff1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631910424274:android:f59ec3451a132c9976d70b",
+        "android_client_info": {
+          "package_name": "com.example.eventec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631910424274-s56bre49am0aj28ul9455b2firfbqel2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmzxsndvk6qfI7hxNJ2QL9J8q0VPXsRz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631910424274-s56bre49am0aj28ul9455b2firfbqel2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

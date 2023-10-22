@@ -27,6 +27,7 @@ public class EventsDisplay extends Fragment {
 
         ArrayList<EventModel> eventModelArrayList = new ArrayList<EventModel>();
 
+        // Leer eventos de Firebase y añadir los eventos al Array de eventModelArrayList
         eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.no_image));
         eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.no_image));
 
