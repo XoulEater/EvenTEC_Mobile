@@ -38,29 +38,22 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.Viewholder> 
     public void onBindViewHolder(@NonNull AlertAdapter.Viewholder holder, int position) {
         // to set data to textview and imageview of each card layout
         AlertModel model = alertModelArrayList.get(position);
-
         holder.alertImageIV.setImageResource(model.getAlertImage());
         holder.subjectTV.setText(model.getSubject());
         holder.bodyTV.setText(model.getBody());
         holder.dateTV.setText(model.getPostdate());
-
-
-
     }
-
     @Override
     public int getItemCount() {
         // this method is used for showing number of card items in recycler view
         return alertModelArrayList.size();
     }
-
     // View holder class for initializing of your views such as TextView and Imageview
     public static class Viewholder extends RecyclerView.ViewHolder {
         private final ImageView alertImageIV;
         private final TextView subjectTV;
         private final TextView bodyTV;
         private final TextView dateTV;
-
 
         public Viewholder(@NonNull View itemView) {
             super(itemView);

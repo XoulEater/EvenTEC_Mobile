@@ -1,6 +1,7 @@
 package com.example.eventec.entities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventec.R;
+import com.example.eventec.activities.Event;
 
 import java.util.ArrayList;
 
@@ -48,7 +50,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, model.getEventName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, Event.class);
+
+                // Pasa los datos del evento a la actividad EventActivity
+                intent.putExtra("index", position);
+                // Añade más extras según sea necesario
+
+                // Inicia la actividad
+                context.startActivity(intent);
             }
         });
 

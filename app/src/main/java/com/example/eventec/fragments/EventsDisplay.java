@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.eventec.R;
 import com.example.eventec.entities.EventAdapter;
 import com.example.eventec.entities.EventModel;
+import com.example.eventec.entities.SingleFirebase;
 
 import java.util.ArrayList;
 
@@ -25,11 +26,8 @@ public class EventsDisplay extends Fragment {
         View view = inflater.inflate(R.layout.fragment_events_display, container, false);
         RecyclerView eventRV = view.findViewById(R.id.RVEvents);
 
-        ArrayList<EventModel> eventModelArrayList = new ArrayList<EventModel>();
-
-        // Leer eventos de Firebase y añadir los eventos al Array de eventModelArrayList
-        eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.no_image));
-        eventModelArrayList.add(new EventModel("Semana ATI", "30 de Sep", "Asocia de ATI", 500, R.drawable.no_image));
+        SingleFirebase single = SingleFirebase.getInstance();
+        ArrayList<EventModel> eventModelArrayList = single.getEventModelArrayList();
 
         EventAdapter eventAdapter = new EventAdapter(requireContext(), eventModelArrayList);
 

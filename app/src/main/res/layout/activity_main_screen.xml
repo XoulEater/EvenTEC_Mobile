@@ -16,7 +16,7 @@
         android:fontFamily="sans-serif-medium"
         android:text="EvenTEC"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,18 +24,18 @@
         android:id="@+id/imageView4"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/options" />
+        app:srcCompat="@drawable/three_dots" />
 
     <com.google.android.material.tabs.TabLayout
 
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="70dp"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -19,7 +19,6 @@ public class StartActivity extends AppCompatActivity {
     private CardView cardViewAsociacion;
     private LinearLayout layoutEstudiante;
     private LinearLayout layoutAsociacion;
-
     private ImageView ivEstudiante;
     private ImageView ivAsociacion;
 
