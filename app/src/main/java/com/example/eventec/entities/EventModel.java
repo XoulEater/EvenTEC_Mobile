@@ -1,11 +1,16 @@
 package com.example.eventec.entities;
 
+import java.util.ArrayList;
+
 public class EventModel {
     private String eventName;
     private String date;
     private String asoName;
     private int capacity;
     private int eventImage;
+    private ArrayList<ActivityModel> activityModelArrayList;
+    private ArrayList<CollabModel> collabModelArrayList;
+
 
     public EventModel(String eventName, String date, String asoName, int capacity, int eventImage) {
         this.eventName = eventName;

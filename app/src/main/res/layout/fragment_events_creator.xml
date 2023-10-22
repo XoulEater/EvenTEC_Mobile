@@ -14,7 +14,6 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/button_background"
         android:gravity="center"
-        android:onClick="continuar"
         android:text="Subir"
         android:textAlignment="center"
         android:textColor="@color/white"
