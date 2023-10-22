@@ -1,23 +1,33 @@
 package com.example.eventec.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.eventec.R;
+import com.example.eventec.entities.SingleFirebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
     private int currentUserType;
+    private SingleFirebase singleFirebase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUserType = getIntent().getIntExtra("userType", 0);
-
+        singleFirebase = SingleFirebase.getInstance();
         switch (currentUserType){
             case 1:
-                setContentView(R.layout.activity_login_c);
                 break;
             case 2:
                 setContentView(R.layout.activity_login_a);
@@ -34,7 +44,65 @@ public class Login extends AppCompatActivity {
     }
 
     // Función que valida con Firebase.
+    public void login (View view){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
 
+        switch (currentUserType){
+            case 1:
+                break;
+            case 2:
+                TextView asocianameText = findViewById(R.id.asocianame);
+                String asocianame = asocianameText.getText().toString();
+                TextView passwordText = findViewById(R.id.password);
+                String password = passwordText.getText().toString();
+
+                myRef.child("asociaciones").child (asocianame).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DataSnapshot dataSnapshot = task.getResult();
+                            if (dataSnapshot.exists()){
+                                if (dataSnapshot.child("password").getValue().toString().equals(password)){
+                                    singleFirebase.setCurrentAsoName(asocianame);
+                                    continuar(view);
+                                } else {
+                                    Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(Login.this, "Asociación no existe", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                });
+                break;
+            default:
+                TextView carnetText = findViewById(R.id.carnet);
+                String carnet = carnetText.getText().toString();
+                TextView passwordUserText = findViewById(R.id.password);
+                String passwordUser = passwordUserText.getText().toString();
+
+                myRef.child("users").child (carnet).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DataSnapshot dataSnapshot = task.getResult();
+                            if (dataSnapshot.exists()){
+                                if (dataSnapshot.child("password").getValue().toString().equals(passwordUser)){
+                                    singleFirebase.setCurrentUserCarnet(carnet);
+                                    continuar(view);
+                                } else {
+                                    Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(Login.this, "Usuario no existe", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                });
+                break;
+        }
+    }
     public void continuar(View view){
         Intent siguiente = new Intent(this, MainScreen.class);
         siguiente.putExtra("userType", currentUserType);

@@ -1,6 +1,15 @@
 package com.example.eventec.entities;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.eventec.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -9,9 +18,36 @@ public class SingleFirebase {
     private static SingleFirebase instance;
     private ArrayList<EventModel> eventModelArrayList;
 
-
+    private int currentUserType;
+    private String currentUserCarnet;
+    private String currentAsoName;
     private SingleFirebase() {
         loadEventList();
+        currentUserCarnet = null;
+        currentUserType = 1;
+        currentAsoName = null;
+    }
+
+    public int getCurrentUserType() {
+        return currentUserType;
+    }
+    public void setCurrentUserType(int currentUserType) {
+        this.currentUserType = currentUserType;
+    }
+
+    public String getCurrentUserCarnet() {
+        return currentUserCarnet;
+    }
+    public void setCurrentUserCarnet(String currentUserCarnet) {
+        this.currentUserCarnet = currentUserCarnet;
+    }
+
+    public String getCurrentAsoName() {
+        return currentAsoName;
+    }
+
+    public void setCurrentAsoName(String currentAsoName) {
+        this.currentAsoName = currentAsoName;
     }
 
     public static SingleFirebase getInstance() {
@@ -22,11 +58,29 @@ public class SingleFirebase {
         return instance;
     }
 
+    public void refreshEventList(){
+        // descarga lista de eventos de firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.child("eventos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                }
+            }
+        });
+    }
+
     public ArrayList<EventModel> getEventModelArrayList() {
         return eventModelArrayList;
     }
 
     private void loadEventList(){
+        // descargar eventos de firebase
         ArrayList<String> categories = new ArrayList<String>();
         categories.add("Musica");
         categories.add("Premios");
@@ -77,4 +131,6 @@ public class SingleFirebase {
         eventModelArrayList.add(event1);
         eventModelArrayList.add(event2);
     }
+
+
 }
