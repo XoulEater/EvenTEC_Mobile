@@ -53,8 +53,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
                 Intent intent = new Intent(context, Event.class);
 
                 // Pasa los datos del evento a la actividad EventActivity
-                intent.putExtra("event_name", model.getEventName());
-                intent.putExtra("event_date", model.getDate());
+                intent.putExtra("index", position);
                 // Añade más extras según sea necesario
 
                 // Inicia la actividad
