@@ -56,7 +56,10 @@ public class Login extends AppCompatActivity {
                 String asocianame = asocianameText.getText().toString();
                 TextView passwordText = findViewById(R.id.password);
                 String password = passwordText.getText().toString();
-
+                if (asocianame.isEmpty() || password.isEmpty()){
+                    Toast.makeText(Login.this, "Llene todos los campos", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 myRef.child("asociaciones").child (asocianame).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -81,7 +84,10 @@ public class Login extends AppCompatActivity {
                 String carnet = carnetText.getText().toString();
                 TextView passwordUserText = findViewById(R.id.password);
                 String passwordUser = passwordUserText.getText().toString();
-
+                if (carnet.isEmpty() || passwordUser.isEmpty()){
+                    Toast.makeText(Login.this, "Llene todos los campos", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 myRef.child("users").child (carnet).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
