@@ -38,19 +38,15 @@ public class EmptyActivityAdapter extends RecyclerView.Adapter<EmptyActivityAdap
         // to inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_activity_layout, parent, false);
         return new Viewholder(view);
-
-
     }
-
     @Override
     public void onBindViewHolder(@NonNull EmptyActivityAdapter.Viewholder holder, int position) {
         ActivityModel model = activities.get(position);
-        // to set data to textview and imageview of each card layout
+        // to set data to editText of each card layout
         holder.dateET.setText(model.getDate());
         holder.timeET.setText(model.getTime());
         holder.titleET.setText(model.getTitle());
         holder.modET.setText(model.getModer());
-
     }
 
     @Override
@@ -73,13 +69,6 @@ public class EmptyActivityAdapter extends RecyclerView.Adapter<EmptyActivityAdap
         if (position >= 0 && position < activities.size()) {
             activities.remove(position);
             notifyItemRemoved(position);
-        }
-    }
-
-    public void updateActivity(int position, ActivityModel activity) {
-        if (position >= 0 && position < activities.size()) {
-            activities.set(position, activity);
-            notifyItemChanged(position);
         }
     }
 
