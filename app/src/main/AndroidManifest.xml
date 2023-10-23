@@ -16,7 +16,7 @@
             android:name=".activities.Event"
             android:exported="false" />
         <activity
-            android:name=".activities.MainScreen"
+            android:name=".activities.StartActivity"
             android:exported="false" />
         <activity
             android:name=".activities.Perfil"
@@ -28,7 +28,7 @@
             android:name=".activities.Login"
             android:exported="false" />
         <activity
-            android:name=".activities.StartActivity"
+            android:name=".activities.MainScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
