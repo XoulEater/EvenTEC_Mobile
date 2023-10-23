@@ -42,8 +42,6 @@ public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.Viewholder
         holder.modImageIV.setImageResource(model.getProfileImage());
         holder.modNameTV.setText(model.getName());
         holder.jobTV.setText(model.getJob());
-
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
