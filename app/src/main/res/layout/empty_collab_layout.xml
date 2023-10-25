@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="1dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/modImage"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_margin="7dp"
+            android:background="@drawable/rounded_image_view"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/no_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="199dp"
+                android:layout_height="wrap_content"
+                android:ems="6"
+                android:inputType="text"
+                android:text="Colaborador"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/job"
+                android:layout_width="198dp"
+                android:layout_height="wrap_content"
+                android:ems="6"
+                android:inputType="text"
+                android:text="Cargo"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="1dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/date"
+                android:layout_width="137dp"
+                android:layout_height="wrap_content"
+
+                android:ems="6"
+                android:inputType="date"
+                android:text="dd/mm/aaaa"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/time"
+                android:layout_width="164dp"
+                android:layout_height="wrap_content"
+
+                android:ems="6"
+                android:inputType="time"
+                android:text="hh/mm"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="199dp"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:inputType="text"
+            android:text="Titulo"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/mod"
+            android:layout_width="198dp"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:inputType="text"
+            android:text="Moderador"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
