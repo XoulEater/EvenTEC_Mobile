@@ -17,9 +17,9 @@ public class EventModel {
     private ArrayList<ActivityModel> activityModelArrayList;
     private ArrayList<CollabModel> collabModelArrayList;
 
-    public EventModel(String eventName, String date, String asoName, int capacity, int eventImage, ArrayList<String> categories, String description, String requirements, String startDate, String endDate, int places) {
+    public EventModel(String eventName, String asoName, int capacity, int eventImage, ArrayList<String> categories, String description, String requirements, String startDate, String endDate) {
         this.eventName = eventName;
-        this.date = date;
+        this.date = "Fecha";
         this.asoName = asoName;
         this.capacity = capacity;
         this.eventImage = eventImage;
@@ -28,7 +28,7 @@ public class EventModel {
         this.requirements = requirements;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.places = places;
+        this.places = 0;
     }
 
     public String getEventName() {

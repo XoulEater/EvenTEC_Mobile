@@ -15,7 +15,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,8 +25,10 @@ import com.example.eventec.entities.ActivityModel;
 import com.example.eventec.entities.CollabModel;
 import com.example.eventec.entities.EmptyActivityAdapter;
 import com.example.eventec.entities.EmptyCollabAdapter;
+import com.example.eventec.entities.EventModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class EventsCreator extends Fragment {
@@ -46,28 +47,29 @@ public class EventsCreator extends Fragment {
     private ArrayList<CollabModel> collabs;
     private EmptyActivityAdapter actAdapter;
     private EmptyCollabAdapter collabAdapter;
+    private View mainView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_events_creator, container, false);
+        mainView = inflater.inflate(R.layout.fragment_events_creator, container, false);
         // Inflate the layout for this fragment
 
-        eventImage = view.findViewById(R.id.eventImage);
-        btnGallery = view.findViewById(R.id.btnGallery);
-        btnAddAct = view.findViewById(R.id.imageButton4);
-        btnDelAct = view.findViewById(R.id.imageButton3);
-        btnAddCollab = view.findViewById(R.id.imageButton5);
-        btnDelCollab = view.findViewById(R.id.imageButton6);
-        btnSubmit = view.findViewById(R.id.submit);
+        eventImage = mainView.findViewById(R.id.eventImage);
+        btnGallery = mainView.findViewById(R.id.btnGallery);
+        btnAddAct = mainView.findViewById(R.id.imageButton4);
+        btnDelAct = mainView.findViewById(R.id.imageButton3);
+        btnAddCollab = mainView.findViewById(R.id.imageButton5);
+        btnDelCollab = mainView.findViewById(R.id.imageButton6);
+        btnSubmit = mainView.findViewById(R.id.submit);
 
-        actRV = view.findViewById(R.id.recyclerView);
+        actRV = mainView.findViewById(R.id.recyclerView);
         activities = new ArrayList<ActivityModel>(); // Inicializa la lista de actividades
         actAdapter = new EmptyActivityAdapter(getContext(), activities);
         actRV.setLayoutManager(new LinearLayoutManager(getContext()));
         actRV.setAdapter(actAdapter);
 
-        collabRV = view.findViewById(R.id.recyclerView2);
+        collabRV = mainView.findViewById(R.id.recyclerView2);
         collabs = new ArrayList<CollabModel>(); // Inicializa la lista de colaboradores
         collabAdapter = new EmptyCollabAdapter(getContext(), collabs);
         collabRV.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -151,10 +153,35 @@ public class EventsCreator extends Fragment {
                         collab.setName(nombre);
                     }
                 }
+                EditText title = mainView.findViewById(R.id.editTextText);
+                EditText description = mainView.findViewById(R.id.editTextTextMultiLine);
+                EditText requirements = mainView.findViewById(R.id.editTextTextMultiLine2);
+                EditText cat1 = mainView.findViewById(R.id.editTextText3);
+                EditText cat2 = mainView.findViewById(R.id.editTextText4);
+                EditText cat3 = mainView.findViewById(R.id.editTextText5);
+                EditText startDate = mainView.findViewById(R.id.editTextDate5);
+                EditText endDate = mainView.findViewById(R.id.editTextDate2);
+                EditText capacity = mainView.findViewById(R.id.editTextNumber);
+
+                String titulo = title.getText().toString();
+                String descripcion = description.getText().toString();
+                String requisitos = requirements.getText().toString();
+                ArrayList<String> categorias = new ArrayList<String>();
+                categorias.add(cat1.getText().toString());
+                categorias.add(cat2.getText().toString());
+                categorias.add(cat3.getText().toString());
+                String fechaInicio = startDate.getText().toString();
+                String fechaFin = endDate.getText().toString();
+                String imagen = selectedImageUri.toString();
+                int capacidad = Integer.parseInt(capacity.getText().toString());
+
+                EventModel event = new EventModel(titulo, "Asocia", capacidad, 1, categorias, descripcion, requisitos, fechaInicio, fechaFin);
+
+                // TODO: Submit Firebase event
             }
         });
 
-        return view;
+        return mainView;
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
