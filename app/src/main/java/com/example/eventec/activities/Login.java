@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity {
                                 if (dataSnapshot.child("password").getValue().toString().equals(password)){
                                     singleFirebase.setCurrentAsoUser(asocianame);
                                     singleFirebase.setCurrentAsoName(dataSnapshot.child("nombreAso").getValue().toString());
-
+                                    singleFirebase.setCurrentUserType(currentUserType);
                                     continuar(view);
                                 } else {
                                     Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
@@ -98,6 +98,7 @@ public class Login extends AppCompatActivity {
                             if (dataSnapshot.exists()){
                                 if (dataSnapshot.child("password").getValue().toString().equals(passwordUser)){
                                     singleFirebase.setCurrentUserCarnet(carnet);
+                                    singleFirebase.setCurrentUserType(currentUserType);
                                     continuar(view);
                                 } else {
                                     Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();

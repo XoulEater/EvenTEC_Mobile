@@ -244,12 +244,20 @@ public class EventModel {
         this.clicks = clicks;
     }
 
+    public void incrementClicks(){
+        this.clicks++;
+    }
+
     public int getCupos() {
         return cupos;
     }
 
     public void setCupos(int cupos) {
         this.cupos = cupos;
+    }
+
+    public void updateCupos(int change){
+        this.cupos += change;
     }
 
     public String getUserAsociacion() {

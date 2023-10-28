@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -303,6 +304,13 @@ public class SingleFirebase {
         } catch (Exception e){
             Toast.makeText(context, "ERROR creando evento.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void incrementarClicksEvento(EventModel event){
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("eventos/" + event.getEventId() + "/clicks", ServerValue.increment(1));
+        myRef.updateChildren(updates);
+        event.incrementClicks();
     }
 
 }

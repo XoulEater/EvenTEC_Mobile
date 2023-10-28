@@ -7,12 +7,13 @@
     tools:context=".activities.Event">
 
     <TextView
-        android:id="@+id/registrarse4"
+        android:id="@+id/reservarBtn"
         android:layout_width="361dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/button_background"
         android:gravity="center"
+        android:onClick="reservar"
         android:text="Reservar"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -155,7 +156,29 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView22" />
+            <TextView
+                android:id="@+id/lugaresLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Lugares:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/requirements" />
 
+            <TextView
+                android:id="@+id/lugares"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="lugares"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/lugaresLabel"
+                app:layout_constraintTop_toTopOf="@+id/lugaresLabel" />
             <TextView
                 android:id="@+id/requirements2"
                 android:layout_width="0dp"
@@ -167,7 +190,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/requirements" />
+                app:layout_constraintTop_toBottomOf="@+id/lugaresLabel" />
 
             <TextView
                 android:id="@+id/startDate"
