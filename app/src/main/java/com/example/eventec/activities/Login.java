@@ -52,7 +52,7 @@ public class Login extends AppCompatActivity {
             case 1:
                 break;
             case 2:
-                TextView asocianameText = findViewById(R.id.asocianame);
+                TextView asocianameText = findViewById(R.id.asocianame); // Usuario de asociación, no display name
                 String asocianame = asocianameText.getText().toString();
                 TextView passwordText = findViewById(R.id.password);
                 String password = passwordText.getText().toString();
@@ -67,7 +67,9 @@ public class Login extends AppCompatActivity {
                             DataSnapshot dataSnapshot = task.getResult();
                             if (dataSnapshot.exists()){
                                 if (dataSnapshot.child("password").getValue().toString().equals(password)){
-                                    singleFirebase.setCurrentAsoName(asocianame);
+                                    singleFirebase.setCurrentAsoUser(asocianame);
+                                    singleFirebase.setCurrentAsoName(dataSnapshot.child("nombreAso").getValue().toString());
+
                                     continuar(view);
                                 } else {
                                     Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();

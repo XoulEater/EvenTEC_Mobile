@@ -1,42 +1,142 @@
 package com.example.eventec.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventModel {
-    private String eventName;
+    private String eventId;
+    private String titulo;
     private String date;
-    private String asoName;
-    private int capacity;
-    private int eventImage;
-    private ArrayList<String> categories;
-    private String description;
-    private String requirements;
-    private String startDate;
-    private String endDate;
-    private int places;
-    private ArrayList<ActivityModel> activityModelArrayList;
-    private ArrayList<CollabModel> collabModelArrayList;
+    private String nombreAsociacion;
+    private int capacidad;
+    private int imagenSrc;
+    private List<String> categorias;
+    private String descripcion;
+    private String requerimientos;
+    private String fechaInicio;
+    private String fechaFin;
+    private String lugares;
+    private List<ActivityModel> activities;
+    private List<CollabModel> colabs;
+    private int clicks;
+    private int cupos;
+    private String userAsociacion;
 
-    public EventModel(String eventName, String asoName, int capacity, int eventImage, ArrayList<String> categories, String description, String requirements, String startDate, String endDate) {
-        this.eventName = eventName;
-        this.date = "Fecha";
-        this.asoName = asoName;
-        this.capacity = capacity;
-        this.eventImage = eventImage;
-        this.categories = categories;
-        this.description = description;
-        this.requirements = requirements;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.places = 0;
+    public void formatDate(String fecha){
+        String[] parts = fecha.split("/");
+        String day = parts[2];
+        String month = parts[1];
+        switch(month){
+            case "01":
+                month = "Ene";
+                break;
+            case "02":
+                month = "Feb";
+                break;
+            case "03":
+                month = "Mar";
+                break;
+            case "04":
+                month = "Abr";
+                break;
+            case "05":
+                month = "May";
+                break;
+            case "06":
+                month = "Jun";
+                break;
+            case "07":
+                month = "Jul";
+                break;
+            case "08":
+                month = "Ago";
+                break;
+            case "09":
+                month = "Sep";
+                break;
+            case "10":
+                month = "Oct";
+                break;
+            case "11":
+                month = "Nov";
+                break;
+            case "12":
+                month = "Dic";
+                break;
+        }
+        String newDate = day + " de " + month;
+        this.date = newDate;
+    }
+    public EventModel(String eventId, String titulo, String userAsociacion, String nombreAsociacion, int capacidad, int imagenSrc, List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin, String lugares, List<ActivityModel> activities, List<CollabModel> colabs, int clicks, int cupos) {
+        this.eventId = eventId;
+        this.titulo = titulo;
+        formatDate(fechaInicio);
+        this.userAsociacion = userAsociacion;
+        this.nombreAsociacion = nombreAsociacion;
+        this.capacidad = capacidad;
+        this.imagenSrc = imagenSrc;
+        this.categorias = categorias;
+        this.descripcion = descripcion;
+        this.requerimientos = requerimientos;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.lugares = lugares;
+        this.activities = activities;
+        this.colabs = colabs;
+        this.clicks = clicks;
+        this.cupos = cupos;
+
     }
 
-    public String getEventName() {
-        return eventName;
+    public EventModel(String eventId, String titulo, String date, String nombreAsociacion, int capacidad, int imagenSrc, List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin, String lugares, List<ActivityModel> activities, List<CollabModel> colabs, int clicks, int cupos, String userAsociacion) {
+        this.eventId = eventId;
+        this.titulo = titulo;
+        this.date = date;
+        this.nombreAsociacion = nombreAsociacion;
+        this.capacidad = capacidad;
+        this.imagenSrc = imagenSrc;
+        this.categorias = categorias;
+        this.descripcion = descripcion;
+        this.requerimientos = requerimientos;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.lugares = lugares;
+        this.activities = activities;
+        this.colabs = colabs;
+        this.clicks = clicks;
+        this.cupos = cupos;
+        this.userAsociacion = userAsociacion;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public EventModel(String eventId, String titulo, String date, String nombreAsociacion, int capacidad, int imagenSrc, List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin, String lugares) {
+        this.eventId = eventId;
+        this.titulo = titulo;
+        this.date = date;
+        this.nombreAsociacion = nombreAsociacion;
+        this.capacidad = capacidad;
+        this.imagenSrc = imagenSrc;
+        this.categorias = categorias;
+        this.descripcion = descripcion;
+        this.requerimientos = requerimientos;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.lugares = lugares;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getDate() {
@@ -47,93 +147,117 @@ public class EventModel {
         this.date = date;
     }
 
-    public String getAsoName() {
-        return asoName;
+    public String getNombreAsociacion() {
+        return nombreAsociacion;
     }
 
-    public void setAsoName(String asoName) {
-        this.asoName = asoName;
+    public void setNombreAsociacion(String nombreAsociacion) {
+        this.nombreAsociacion = nombreAsociacion;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public int getCapacidad() {
+        return capacidad;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
     }
 
-    public int getEventImage() {
-        return eventImage;
+    public int getImagenSrc() {
+        return imagenSrc;
     }
 
-    public void setEventImage(int eventImage) {
-        this.eventImage = eventImage;
+    public void setImagenSrc(int imagenSrc) {
+        this.imagenSrc = imagenSrc;
     }
 
 
-    public ArrayList<String> getCategories() {
-        return categories;
+    public List<String> getCategorias() {
+        return categorias;
     }
 
-    public void setCategories(ArrayList<String> categories) {
-        this.categories = categories;
+    public void setCategorias(ArrayList<String> categorias) {
+        this.categorias = categorias;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getRequirements() {
-        return requirements;
+    public String getRequerimientos() {
+        return requerimientos;
     }
 
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
+    public void setRequerimientos(String requerimientos) {
+        this.requerimientos = requerimientos;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getFechaFin() {
+        return fechaFin;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
-    public int getPlaces() {
-        return places;
+    public String getLugares() {
+        return lugares;
     }
 
-    public void setPlaces(int places) {
-        this.places = places;
+    public void setLugares(String lugares) {
+        this.lugares = lugares;
     }
 
-    public ArrayList<ActivityModel> getActivityModelArrayList() {
-        return activityModelArrayList;
+    public List<ActivityModel> getActivities() {
+        return activities;
     }
 
-    public void setActivityModelArrayList(ArrayList<ActivityModel> activityModelArrayList) {
-        this.activityModelArrayList = activityModelArrayList;
+    public void setActivities(ArrayList<ActivityModel> activities) {
+        this.activities = activities;
     }
 
-    public ArrayList<CollabModel> getCollabModelArrayList() {
-        return collabModelArrayList;
+    public List<CollabModel> getColabs() {
+        return colabs;
     }
 
-    public void setCollabModelArrayList(ArrayList<CollabModel> collabModelArrayList) {
-        this.collabModelArrayList = collabModelArrayList;
+    public void setColabs(ArrayList<CollabModel> colabs) {
+        this.colabs = colabs;
+    }
+
+    public int getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(int clicks) {
+        this.clicks = clicks;
+    }
+
+    public int getCupos() {
+        return cupos;
+    }
+
+    public void setCupos(int cupos) {
+        this.cupos = cupos;
+    }
+
+    public String getUserAsociacion() {
+        return userAsociacion;
+    }
+
+    public void setUserAsociacion(String userAsociacion) {
+        this.userAsociacion = userAsociacion;
     }
 }
 

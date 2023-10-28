@@ -19,13 +19,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.eventec.R;
+import com.example.eventec.activities.Registro;
 import com.example.eventec.entities.ActivityModel;
 import com.example.eventec.entities.CollabModel;
 import com.example.eventec.entities.EmptyActivityAdapter;
 import com.example.eventec.entities.EmptyCollabAdapter;
 import com.example.eventec.entities.EventModel;
+import com.example.eventec.entities.SingleFirebase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,22 +165,27 @@ public class EventsCreator extends Fragment {
                 EditText startDate = mainView.findViewById(R.id.editTextDate5);
                 EditText endDate = mainView.findViewById(R.id.editTextDate2);
                 EditText capacity = mainView.findViewById(R.id.editTextNumber);
+                EditText places = mainView.findViewById(R.id.editTextTextMultiLineLugares);
 
                 String titulo = title.getText().toString();
                 String descripcion = description.getText().toString();
                 String requisitos = requirements.getText().toString();
-                ArrayList<String> categorias = new ArrayList<String>();
+                List<String> categorias = new ArrayList<String>();
                 categorias.add(cat1.getText().toString());
                 categorias.add(cat2.getText().toString());
                 categorias.add(cat3.getText().toString());
                 String fechaInicio = startDate.getText().toString();
                 String fechaFin = endDate.getText().toString();
-                String imagen = selectedImageUri.toString();
+                Integer imagen = R.drawable.events; // Integer.parseInt(selectedImageUri.toString());
                 int capacidad = Integer.parseInt(capacity.getText().toString());
+                String lugares = places.getText().toString();
 
-                EventModel event = new EventModel(titulo, "Asocia", capacidad, 1, categorias, descripcion, requisitos, fechaInicio, fechaFin);
+                SingleFirebase singleFirebase = SingleFirebase.getInstance();
+                String asociacionName = singleFirebase.getCurrentAsoName();
 
-                // TODO: Submit Firebase event
+                // Upload event to Firebase
+                singleFirebase.uploadEvent(titulo, capacidad, imagen, categorias, descripcion, requisitos, fechaInicio, fechaFin, lugares, activities, collabs);
+                Toast.makeText(getContext(), "Alguno de los miembros no existe", Toast.LENGTH_LONG).show();
             }
         });
 

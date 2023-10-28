@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,15 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventec.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Viewholder> {
 
     private final Context context;
-    private final ArrayList<ActivityModel> activityModelArrayList;
+    private final List<ActivityModel> activityModelArrayList;
 
     // Constructor
-    public ActivityAdapter(Context context, ArrayList<ActivityModel> activityModelArrayList) {
+    public ActivityAdapter(Context context, List<ActivityModel> activityModelArrayList) {
         this.context = context;
         this.activityModelArrayList = activityModelArrayList;
     }

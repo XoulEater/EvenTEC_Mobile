@@ -13,15 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventec.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.Viewholder> {
 
     private final Context context;
-    private final ArrayList<CollabModel> collabModelArrayList;
+    private final List<CollabModel> collabModelArrayList;
 
     // Constructor
-    public CollabAdapter(Context context, ArrayList<CollabModel> collabModelArrayList) {
+    public CollabAdapter(Context context, List<CollabModel> collabModelArrayList) {
         this.context = context;
         this.collabModelArrayList = collabModelArrayList;
     }

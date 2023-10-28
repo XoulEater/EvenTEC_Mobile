@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,11 +40,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
         // to set data to textview and imageview of each card layout
         EventModel model = eventModelArrayList.get(position);
 
-        holder.eventImageIV.setImageResource(model.getEventImage());
-        holder.eventTitleTV.setText(model.getEventName());
+        holder.eventImageIV.setImageResource(model.getImagenSrc());
+        holder.eventTitleTV.setText(model.getTitulo());
         holder.dateTV.setText(model.getDate());
-        holder.capacityTV.setText("" + model.getCapacity());
-        holder.asoNameTV.setText(model.getAsoName());
+        holder.capacityTV.setText("" + model.getCapacidad());
+        holder.asoNameTV.setText(model.getNombreAsociacion());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

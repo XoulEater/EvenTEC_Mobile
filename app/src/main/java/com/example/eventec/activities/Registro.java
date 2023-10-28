@@ -66,12 +66,12 @@ public class Registro extends AppCompatActivity {
         return matcher.find();
     }
 
-    private void registerAsociacion(String nombreAso, String carrera, String password, String email, String phone, String descripcion, List<String> miembros) {
+    private void registerAsociacion(String userAso, String nombreAso, String carrera, String password, String email, String phone, String descripcion, List<String> miembros) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
-        Asociacion asociacion = new Asociacion(nombreAso, carrera, password, email, phone, descripcion, miembros);
+        Asociacion asociacion = new Asociacion(userAso, nombreAso, carrera, password, email, phone, descripcion, miembros);
 
-        myRef.child("asociaciones").child(nombreAso).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        myRef.child("asociaciones").child(userAso).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -100,7 +100,7 @@ public class Registro extends AppCompatActivity {
                                     if (notExists){
                                         Toast.makeText(Registro.this, "Alguno de los miembros no existe", Toast.LENGTH_LONG).show();
                                     } else {
-                                        myRef.child("asociaciones").child(nombreAso).setValue(asociacion);
+                                        myRef.child("asociaciones").child(userAso).setValue(asociacion);
                                         Toast.makeText(Registro.this, "Asociación registrada", Toast.LENGTH_LONG).show();
                                         Intent siguiente = new Intent(Registro.this, Login.class);
                                         siguiente.putExtra("userType", currentUserType);
@@ -152,6 +152,8 @@ public class Registro extends AppCompatActivity {
                 String nombreAso = nombreAsoText.getText().toString();
                 TextView carreraText = findViewById(R.id.carrera);
                 String carrera = carreraText.getText().toString();
+                TextView userAsoText = findViewById(R.id.userAso);
+                String userAso = userAsoText.getText().toString();
                 TextView passwordText = findViewById(R.id.password);
                 String password = passwordText.getText().toString();
                 TextView emailText = findViewById(R.id.email);
@@ -173,7 +175,7 @@ public class Registro extends AppCompatActivity {
                     Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_LONG).show();
                     return;
                 } else {
-                    registerAsociacion(nombreAso, carrera, password, email, phone, descripcion, miembrosList);
+                    registerAsociacion(userAso, nombreAso, carrera, password, email, phone, descripcion, miembrosList);
                 }
                 break;
             default: //Estudiante

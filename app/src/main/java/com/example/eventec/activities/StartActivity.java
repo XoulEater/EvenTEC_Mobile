@@ -5,11 +5,13 @@ import androidx.cardview.widget.CardView;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.eventec.R;
+import com.example.eventec.entities.SingleFirebase;
 
 
 public class StartActivity extends AppCompatActivity {
@@ -36,6 +38,9 @@ public class StartActivity extends AppCompatActivity {
         ivEstudiante = findViewById(R.id.imageView1);
         ivAsociacion = findViewById(R.id.imageView3);
 
+        Log.d("TEST", "" + R.drawable.events);
+//        SingleFirebase singleFirebase = SingleFirebase.getInstance();
+//        singleFirebase.refreshEventList();
 
         cardViewEstudiante.setOnClickListener(new View.OnClickListener() {
             @Override

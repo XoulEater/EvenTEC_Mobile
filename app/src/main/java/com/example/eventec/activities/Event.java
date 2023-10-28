@@ -17,7 +17,7 @@ import com.example.eventec.entities.CollabModel;
 import com.example.eventec.entities.EventModel;
 import com.example.eventec.entities.SingleFirebase;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Event extends AppCompatActivity {
     private EventModel model;
@@ -41,7 +41,7 @@ public class Event extends AppCompatActivity {
     private void loadCollabs(){
         RecyclerView collabsRV = findViewById(R.id.collabsRV);;
 
-        ArrayList<CollabModel> collabModelArrayList = model.getCollabModelArrayList();
+        List<CollabModel> collabModelArrayList = model.getColabs();
 
         CollabAdapter collabAdapter = new CollabAdapter(this, collabModelArrayList);
 
@@ -54,7 +54,7 @@ public class Event extends AppCompatActivity {
     private void loadActivities(){
         RecyclerView activitiesRV = findViewById(R.id.activitiesRV);;
 
-        ArrayList<ActivityModel> activityModelArrayList = model.getActivityModelArrayList();
+        List<ActivityModel> activityModelArrayList = model.getActivities();
 
         ActivityAdapter activityAdapter = new ActivityAdapter(this, activityModelArrayList);
 
@@ -76,15 +76,15 @@ public class Event extends AppCompatActivity {
         TextView endDateTV = findViewById(R.id.endDate);
         TextView capacityTV = findViewById(R.id.capacity);
 
-        eventImageIV.setImageResource(model.getEventImage());
-        cat1TV.setText(model.getCategories().get(0));
-        cat2TV.setText(model.getCategories().get(1));
-        cat3TV.setText(model.getCategories().get(2));
-        titleTV.setText(model.getEventName());
-        descriptionTV.setText(model.getDescription());
-        requirementsTV.setText(model.getRequirements());
-        startDateTV.setText(model.getStartDate());
-        endDateTV.setText(model.getEndDate());
-        capacityTV.setText(model.getPlaces() + "/" + model.getCapacity());
+        eventImageIV.setImageResource(model.getImagenSrc());
+        cat1TV.setText(model.getCategorias().get(0));
+        cat2TV.setText(model.getCategorias().get(1));
+        cat3TV.setText(model.getCategorias().get(2));
+        titleTV.setText(model.getTitulo());
+        descriptionTV.setText(model.getDescripcion());
+        requirementsTV.setText(model.getRequerimientos());
+        startDateTV.setText(model.getFechaInicio());
+        endDateTV.setText(model.getFechaFin());
+        capacityTV.setText(model.getLugares() + "/" + model.getCapacidad());
     }
 }

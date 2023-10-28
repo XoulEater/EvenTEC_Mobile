@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Asociacion {
     private String nombreAso;
+    private String userAso;
+
     private String carrera;
     private String password;
     private String email;
@@ -11,7 +13,8 @@ public class Asociacion {
     private String descripcion;
     private List<String> miembros;
 
-    public Asociacion(String nombreAso, String carrera, String password, String email, String phone, String descripcion, List<String> miembros) {
+    public Asociacion(String userAso, String nombreAso, String carrera, String password, String email, String phone, String descripcion, List<String> miembros) {
+        this.userAso = userAso;
         this.nombreAso = nombreAso;
         this.carrera = carrera;
         this.password = password;
@@ -19,6 +22,14 @@ public class Asociacion {
         this.phone = phone;
         this.descripcion = descripcion;
         this.miembros = miembros;
+    }
+
+    public String getUserAso() {
+        return userAso;
+    }
+
+    public void setUserAso(String userAso) {
+        this.userAso = userAso;
     }
 
     public String getNombreAso() {
