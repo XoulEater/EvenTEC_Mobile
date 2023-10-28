@@ -1,10 +1,22 @@
 package com.example.eventec.entities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.eventec.R;
+import com.example.eventec.activities.Login;
+import com.example.eventec.activities.MainScreen;
+import com.example.eventec.activities.Registro;
+import com.example.eventec.fragments.EventsCreator;
+import com.example.eventec.fragments.EventsDisplay;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -28,10 +40,14 @@ public class SingleFirebase {
     private String currentAsoName;
     private String currentAsoUser;
 
-
     private FirebaseDatabase database;
 
     private DatabaseReference myRef;
+
+    private MainScreen mainScreen;
+
+
+
     private SingleFirebase() {
         loadEventList();
         currentUserCarnet = null;
@@ -71,6 +87,27 @@ public class SingleFirebase {
     public void setCurrentAsoUser(String currentAsoUser) {
         this.currentAsoUser = currentAsoUser;
     }
+
+    public MainScreen getMainScreen() {
+        return mainScreen;
+    }
+
+    public void setMainScreen(MainScreen mainScreen) {
+        this.mainScreen = mainScreen;
+    }
+
+    public ArrayList<EventModel> getEventModelArrayList() {
+        return eventModelArrayList;
+    }
+
+    public FirebaseDatabase getDatabase() {
+        return database;
+    }
+
+    public DatabaseReference getMyRef() {
+        return myRef;
+    }
+
 
     public static SingleFirebase getInstance() {
         // Método para obtener la instancia única de la clase.
@@ -149,9 +186,7 @@ public class SingleFirebase {
         });
     }
 
-    public ArrayList<EventModel> getEventModelArrayList() {
-        return eventModelArrayList;
-    }
+
 
     private void loadEventList(){
         // descargar eventos de firebase
@@ -207,21 +242,67 @@ public class SingleFirebase {
 //        eventModelArrayList.add(event2);
     }
 
-    public FirebaseDatabase getDatabase() {
-        return database;
-    }
 
-    public DatabaseReference getMyRef() {
-        return myRef;
-    }
 
-    public void uploadEvent(String titulo, int capacidad, int imagenSrc, List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin, String lugares, List<ActivityModel> activities, List<CollabModel> colabs){
-        DatabaseReference eventNode = myRef.child("eventos").push();
-        String eventId = eventNode.getKey();
-        EventModel event = new EventModel(eventId, titulo, this.currentAsoUser, this.currentAsoName, capacidad, imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares, activities, colabs, 0, 0);
-        eventModelArrayList.add(event);
-        eventModelHashMap.put(eventId, event);
-        eventNode.setValue(event);
+    public void uploadEvent(View mainView, Context context, String titulo, int capacidad, int imagenSrc, List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin, String lugares, List<ActivityModel> activities, List<CollabModel> colabs){
+        try {
+            myRef.child("users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    }
+                    else {
+                        boolean notExists = true;
+                        HashMap<String, HashMap<?, ?>> users = (HashMap<String, HashMap<?, ?>>)task.getResult().getValue();
+                        Set<String> carnetUsers = users.keySet();
+                        for(CollabModel colab : colabs){
+                            for (String carnet : carnetUsers){
+                                if (users.get(carnet).get("name").equals(colab.getName())){
+                                    notExists = false;
+                                    break;
+                                }
+                            }
+
+                        }
+                        if (notExists){
+                            Toast.makeText(context, "ERROR: Alguno de los colaboradores no existe.", Toast.LENGTH_LONG).show();
+                        } else {
+                            DatabaseReference eventNode = myRef.child("eventos").push();
+                            String eventId = eventNode.getKey();
+                            EventModel event = new EventModel(eventId, titulo, currentAsoUser, currentAsoName, capacidad, imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares, activities, colabs, 0, 0);
+                            eventModelArrayList.add(event);
+                            eventModelHashMap.put(eventId, event);
+                            eventNode.setValue(event);
+                            Toast.makeText( context, "Evento creado con éxito.", Toast.LENGTH_LONG).show();
+
+                            EditText title = mainView.findViewById(R.id.editTextText);
+                            EditText description = mainView.findViewById(R.id.editTextTextMultiLine);
+                            EditText requirements = mainView.findViewById(R.id.editTextTextMultiLine2);
+                            EditText cat1 = mainView.findViewById(R.id.editTextText3);
+                            EditText cat2 = mainView.findViewById(R.id.editTextText4);
+                            EditText cat3 = mainView.findViewById(R.id.editTextText5);
+                            EditText startDate = mainView.findViewById(R.id.editTextDate5);
+                            EditText endDate = mainView.findViewById(R.id.editTextDate2);
+                            EditText capacity = mainView.findViewById(R.id.editTextNumber);
+                            EditText places = mainView.findViewById(R.id.editTextTextMultiLineLugares);
+                            title.setText("Título");
+                            description.setText("");
+                            requirements.setText("");
+                            cat1.setText("");
+                            cat2.setText("");
+                            cat3.setText("");
+                            startDate.setText("");
+                            endDate.setText("");
+                            capacity.setText("");
+                            places.setText("");
+                        }
+                    }
+                }
+            });
+        } catch (Exception e){
+            Toast.makeText(context, "ERROR creando evento.", Toast.LENGTH_LONG).show();
+        }
     }
 
 }

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eventec.R;
+import com.example.eventec.activities.MainScreen;
 import com.example.eventec.activities.Registro;
 import com.example.eventec.entities.ActivityModel;
 import com.example.eventec.entities.CollabModel;
@@ -51,7 +52,6 @@ public class EventsCreator extends Fragment {
     private EmptyActivityAdapter actAdapter;
     private EmptyCollabAdapter collabAdapter;
     private View mainView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -167,26 +167,35 @@ public class EventsCreator extends Fragment {
                 EditText capacity = mainView.findViewById(R.id.editTextNumber);
                 EditText places = mainView.findViewById(R.id.editTextTextMultiLineLugares);
 
-                String titulo = title.getText().toString();
-                String descripcion = description.getText().toString();
-                String requisitos = requirements.getText().toString();
-                List<String> categorias = new ArrayList<String>();
-                categorias.add(cat1.getText().toString());
-                categorias.add(cat2.getText().toString());
-                categorias.add(cat3.getText().toString());
-                String fechaInicio = startDate.getText().toString();
-                String fechaFin = endDate.getText().toString();
-                Integer imagen = R.drawable.events; // Integer.parseInt(selectedImageUri.toString());
-                int capacidad = Integer.parseInt(capacity.getText().toString());
-                String lugares = places.getText().toString();
-
-                SingleFirebase singleFirebase = SingleFirebase.getInstance();
-                String asociacionName = singleFirebase.getCurrentAsoName();
-
-                // Upload event to Firebase
-                singleFirebase.uploadEvent(titulo, capacidad, imagen, categorias, descripcion, requisitos, fechaInicio, fechaFin, lugares, activities, collabs);
-                Toast.makeText(getContext(), "Alguno de los miembros no existe", Toast.LENGTH_LONG).show();
+                try {
+                    String titulo = title.getText().toString();
+                    String descripcion = description.getText().toString();
+                    String requisitos = requirements.getText().toString();
+                    List<String> categorias = new ArrayList<String>();
+                    categorias.add(cat1.getText().toString());
+                    categorias.add(cat2.getText().toString());
+                    categorias.add(cat3.getText().toString());
+                    String fechaInicio = startDate.getText().toString();
+                    String fechaFin = endDate.getText().toString();
+                    int imagen = R.drawable.events; // Integer.parseInt(selectedImageUri.toString());
+                    int capacidad = Integer.parseInt(capacity.getText().toString());
+                    String lugares = places.getText().toString();
+                    SingleFirebase singleFirebase = SingleFirebase.getInstance();
+                    String asociacionName = singleFirebase.getCurrentAsoName();
+                    // Upload event to Firebase
+                    if (!titulo.isEmpty() && !descripcion.isEmpty() && !requisitos.isEmpty() && !categorias.isEmpty() &&
+                            !fechaInicio.isEmpty() && !fechaFin.isEmpty() && !lugares.isEmpty() && !activities.isEmpty()
+                            && !collabs.isEmpty() && !asociacionName.isEmpty()
+                            && imagen > 0 && capacidad > 0) {
+                        singleFirebase.uploadEvent(mainView, getContext(),titulo, capacidad, imagen, categorias, descripcion, requisitos, fechaInicio, fechaFin, lugares, activities, collabs);
+                    } else {
+                        Toast.makeText(getContext(), "Llene todos los campos", Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Llene todos los campos", Toast.LENGTH_LONG).show();
+                }
             }
+
         });
 
         return mainView;
