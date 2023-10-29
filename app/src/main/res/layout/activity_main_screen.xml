@@ -7,6 +7,25 @@
     android:background="@drawable/bg"
     tools:context=".activities.MainScreen">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp">
+
+        <!-- Add an ImageView for the background image with scaleType -->
+        <ImageView
+            android:id="@+id/toolbarBackgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg" />
+    </androidx.appcompat.widget.Toolbar>
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -20,15 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/three_dots" />
+
 
     <com.google.android.material.tabs.TabLayout
 

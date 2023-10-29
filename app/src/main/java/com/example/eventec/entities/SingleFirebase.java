@@ -1,5 +1,7 @@
 package com.example.eventec.entities;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -15,6 +17,7 @@ import com.example.eventec.R;
 import com.example.eventec.activities.Login;
 import com.example.eventec.activities.MainScreen;
 import com.example.eventec.activities.Registro;
+import com.example.eventec.activities.StartActivity;
 import com.example.eventec.fragments.EventsCreator;
 import com.example.eventec.fragments.EventsDisplay;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -117,6 +120,15 @@ public class SingleFirebase {
 
         }
         return instance;
+    }
+
+    public void logout(Context context){
+        currentUserCarnet = null;
+        currentUserType = 1;
+        currentAsoName = null;
+        currentAsoUser = null;
+        Intent siguiente = new Intent(context, StartActivity.class);
+        context.startActivity(siguiente);
     }
 
     public void refreshEventList(){

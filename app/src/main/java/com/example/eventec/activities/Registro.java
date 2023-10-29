@@ -38,7 +38,6 @@ public class Registro extends AppCompatActivity {
 
         switch (currentUserType) {
             case 1:
-                setContentView(R.layout.activity_registro_c);
                 break;
             case 2:
                 setContentView(R.layout.activity_registro_a);
