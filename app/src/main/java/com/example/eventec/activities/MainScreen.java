@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -88,6 +89,10 @@ public class MainScreen extends AppCompatActivity {
             if (item.getItemId() == R.id.logout_asociacion){
                 Toast.makeText(this, "LOGOUT", Toast.LENGTH_SHORT).show();
                 singleFirebase.logout(this);
+                return true;
+            } else if (item.getItemId() == R.id.perfil_asociacion) {
+                Intent siguiente = new Intent(this, Perfil.class);
+                startActivity(siguiente);
                 return true;
             } else {
                 return super.onOptionsItemSelected(item);
