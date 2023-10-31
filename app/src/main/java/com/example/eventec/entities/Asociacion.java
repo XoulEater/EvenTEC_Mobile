@@ -13,6 +13,8 @@ public class Asociacion {
     private String descripcion;
     private List<String> miembros;
 
+    private boolean enabled;
+
     public Asociacion(String userAso, String nombreAso, String carrera, String password, String email, String phone, String descripcion, List<String> miembros) {
         this.userAso = userAso;
         this.nombreAso = nombreAso;
@@ -22,6 +24,7 @@ public class Asociacion {
         this.phone = phone;
         this.descripcion = descripcion;
         this.miembros = miembros;
+        this.enabled = true;
     }
 
     public String getUserAso() {
@@ -86,5 +89,13 @@ public class Asociacion {
 
     public void setMiembros(List<String> miembros) {
         this.miembros = miembros;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

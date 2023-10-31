@@ -47,6 +47,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/button_background_red"
             android:gravity="center"
+            android:onClick="eliminar"
             android:text="Eliminar"
             android:textAlignment="center"
             android:textColor="@color/white"

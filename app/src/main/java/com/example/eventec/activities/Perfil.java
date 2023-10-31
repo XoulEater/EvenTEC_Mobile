@@ -15,6 +15,8 @@ import com.example.eventec.R;
 import com.example.eventec.entities.Asociacion;
 import com.example.eventec.entities.SingleFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -228,6 +230,69 @@ public class Perfil extends AppCompatActivity {
             TextView editarBtn = findViewById(R.id.editar);
             editarBtn.setText("Guardar");
         }
+    }
+
+    public void eliminar(View view){
+        DatabaseReference myRef = singleFirebase.getMyRef();
+        myRef.child("asociaciones").child(asoUser).child("enabled").setValue(false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        myRef.child("eventos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.e("firebase", "Error getting data", task.getException());
+                                }
+                                else {
+                                    HashMap<String, HashMap<?, ?>> eventos = (HashMap<String, HashMap<?, ?>>) task.getResult().getValue();
+                                    myRef.child("inscritos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                            if (!task.isSuccessful()) {
+                                                Log.e("firebase", "Error getting data", task.getException());
+                                            }
+                                            else {
+                                                HashMap<String, HashMap<?, ?>> inscritos = (HashMap<String, HashMap<?, ?>>) task.getResult().getValue();
+                                                HashMap<String, HashMap<?, ?>> userEventos = (HashMap<String, HashMap<?, ?>>) task.getResult().getValue();
+                                                for (String evento : eventos.keySet()){
+                                                    HashMap<String, ?> eventoMap = (HashMap<String, ?>) eventos.get(evento);
+                                                    if (eventoMap.get("userAsociacion").equals(asoUser)){
+                                                        String eventId = eventoMap.get("eventId").toString();
+                                                        String newEventTitle = "CANCELADO " + eventoMap.get("titulo").toString();
+                                                        HashMap<String, Object> updates = new HashMap<>();
+                                                        updates.put("eventos/" + eventId +"/enabled", false);
+                                                        updates.put("eventos/" + eventId +"/nombreAsociacion", "Asociación eliminada");
+                                                        updates.put("eventos/" + eventId +"/titulo", newEventTitle);
+                                                        updates.put("eventos/" + eventId +"/cupos", eventoMap.get("capacidad"));
+                                                        HashMap<String, ?> inscritosEvento = (HashMap<String, ?>) inscritos.get(eventId);
+                                                        for (String inscrito : inscritosEvento.keySet()){
+                                                            if (inscritosEvento.get(inscrito).equals(true)){
+                                                                updates.put("userEventos/" + inscrito + "/" + eventId, false);
+                                                                updates.put("inscritos/" + eventId + "/" + inscrito, false);
+                                                            }
+                                                        }
+                                                        myRef.updateChildren(updates);
+                                                    }
+                                                }
+                                                Toast.makeText(Perfil.this, "Asociación eliminada", Toast.LENGTH_LONG).show();
+                                                singleFirebase.logout(Perfil.this);
+                                            }
+                                        }
+                                    });
+                                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                                }
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Write failed
+                        // ...
+                        Toast.makeText(Perfil.this, "Error al eliminar la asociación", Toast.LENGTH_LONG).show();
+                    }
+                });;
 
     }
 }

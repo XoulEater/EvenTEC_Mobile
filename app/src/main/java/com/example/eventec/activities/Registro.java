@@ -78,7 +78,7 @@ public class Registro extends AppCompatActivity {
                 }
                 else {
 
-                    if (task.getResult().getValue() != null){
+                    if (task.getResult().getValue() != null && ((HashMap<String, ?>) task.getResult().getValue()).get("enabled").equals(true)){
                         Toast.makeText(Registro.this, "Ya existe una asociación con ese nombre", Toast.LENGTH_LONG).show();
                     } else {
                         myRef.child("users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {

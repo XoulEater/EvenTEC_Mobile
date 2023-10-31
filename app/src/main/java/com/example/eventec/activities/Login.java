@@ -66,13 +66,13 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()){
                             DataSnapshot dataSnapshot = task.getResult();
                             if (dataSnapshot.exists()){
-                                if (dataSnapshot.child("password").getValue().toString().equals(password)){
+                                if (dataSnapshot.child("password").getValue().toString().equals(password) && dataSnapshot.child("enabled").getValue().equals(true)){
                                     singleFirebase.setCurrentAsoUser(asocianame);
                                     singleFirebase.setCurrentAsoName(dataSnapshot.child("nombreAso").getValue().toString());
                                     singleFirebase.setCurrentUserType(currentUserType);
                                     continuar(view);
                                 } else {
-                                    Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Login.this, "Contraseña incorrecta o asociación fue borrada", Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 Toast.makeText(Login.this, "Asociación no existe", Toast.LENGTH_LONG).show();

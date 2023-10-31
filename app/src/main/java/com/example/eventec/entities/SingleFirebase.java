@@ -112,7 +112,6 @@ public class SingleFirebase {
         return myRef;
     }
 
-
     public static SingleFirebase getInstance() {
         // Método para obtener la instancia única de la clase.
         if (instance == null) {
