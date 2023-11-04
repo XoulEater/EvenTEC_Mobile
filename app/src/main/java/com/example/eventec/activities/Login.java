@@ -99,6 +99,7 @@ public class Login extends AppCompatActivity {
                                 if (dataSnapshot.child("password").getValue().toString().equals(passwordUser)){
                                     singleFirebase.setCurrentUserCarnet(carnet);
                                     singleFirebase.setCurrentUserType(currentUserType);
+                                    singleFirebase.setCurrentUserEmail(dataSnapshot.child("email").getValue().toString());
                                     continuar(view);
                                 } else {
                                     Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();

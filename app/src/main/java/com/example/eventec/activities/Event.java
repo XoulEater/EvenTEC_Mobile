@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.eventec.R;
+import com.example.eventec.email.SendMail;
 import com.example.eventec.entities.ActivityAdapter;
 import com.example.eventec.entities.ActivityModel;
 import com.example.eventec.entities.CollabAdapter;
@@ -169,6 +170,11 @@ public class Event extends AppCompatActivity {
                 model.updateCupos(1);
                 userInscrito = true;
                 reservarBtn.setText("Cancelar");
+
+                // Instanciar SendMail
+                SendMail sm = new SendMail(singleFirebase.getCurrentUserEmail(), "Reserva de evento", "Se ha reservado el evento " + model.getTitulo() + " con éxito.");
+                sm.setQRData(model.getEventId() + " " + currentCarnet);
+                sm.execute();
             }
             TextView capacityTV = findViewById(R.id.capacity);
             capacityTV.setText(model.getCupos() + "/" + model.getCapacidad());

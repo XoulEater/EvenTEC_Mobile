@@ -41,6 +41,8 @@ public class SingleFirebase {
 
     private int currentUserType;
     private String currentUserCarnet;
+
+    private String currentUserEmail;
     private String currentAsoName;
     private String currentAsoUser;
 
@@ -75,6 +77,13 @@ public class SingleFirebase {
     }
     public void setCurrentUserCarnet(String currentUserCarnet) {
         this.currentUserCarnet = currentUserCarnet;
+    }
+
+    public String getCurrentUserEmail() {
+        return currentUserEmail;
+    }
+    public void setCurrentUserEmail(String currentUserEmail) {
+        this.currentUserEmail = currentUserEmail;
     }
 
     public String getCurrentAsoName() {
