@@ -26,35 +26,38 @@ import com.example.eventec.fragments.EventsCreator;
 import com.example.eventec.fragments.EventsDisplay;
 import com.google.android.material.tabs.TabLayout;
 
+// Clase que se encarga de mostrar la pantalla principal de la aplicación
 public class MainScreen extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TextView EvenTEC;
-
-    private SingleFirebase singleFirebase;
+    private SingleFirebase singleFirebase; // Singleton
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
+        // Inicialización de variables
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         EvenTEC = findViewById(R.id.textView4);
 
-        singleFirebase = SingleFirebase.getInstance();
+        singleFirebase = SingleFirebase.getInstance(); // Instancia del singleton
 
+        // Colores de la palabra EvenTEC
         String Even = getColoredSpanned("Even", "#FFFFFF");
         String TEC = getColoredSpanned("TEC","#0094FF");
         EvenTEC.setText(Html.fromHtml(Even+TEC));
 
+        // Configuración del tabLayout y del viewPager
         tabLayout.setupWithViewPager(viewPager);
-
         VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         vpAdapter.addFragment(new EventsDisplay(), "Inicio");
         vpAdapter.addFragment(new EventsAlert(), "Avisos");
         vpAdapter.addFragment(new EventsCreator(), "Crear");
         viewPager.setAdapter(vpAdapter);
 
+        // Configuración del toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         Drawable customMenuIcon = ContextCompat.getDrawable(this, R.drawable.three_dots);
         mToolbar.setOverflowIcon(customMenuIcon);
@@ -63,6 +66,7 @@ public class MainScreen extends AppCompatActivity {
     }
 
     @Override
+    // Método que se encarga de inflar el menú
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d("TEST", "MENU INFLATED");
         MenuInflater inflater = getMenuInflater();
@@ -76,7 +80,9 @@ public class MainScreen extends AppCompatActivity {
     }
 
     @Override
+    // Método que se encarga de manejar los eventos del menú
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         if (singleFirebase.getCurrentUserType() == 0){
             if (item.getItemId() == R.id.logout_estudiante){
                 Toast.makeText(this, "LOGOUT", Toast.LENGTH_SHORT).show();
@@ -100,6 +106,7 @@ public class MainScreen extends AppCompatActivity {
         }
     }
 
+    // Método que se encarga de colorear la palabra EvenTEC
     private String getColoredSpanned(String text, String color) {
         String input = "<font color=" + color + ">" + text + "</font>";
         return input;

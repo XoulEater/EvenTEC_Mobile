@@ -33,29 +33,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+// Clase que implementa el patrón Singleton para tener una única instancia de la clase
 public class SingleFirebase {
     // Atributo privado para almacenar la única instancia de la clase
     private static SingleFirebase instance;
-    private ArrayList<EventModel> eventModelArrayList;
+    private ArrayList<EventModel> eventModelArrayList; // lista de eventos
     private HashMap<String, EventModel> eventModelHashMap;
-
     private int currentUserType;
     private String currentUserCarnet;
-
+    private String currentUsername;
     private String currentUserEmail;
-    private String currentAsoName;
-    private String currentAsoUser;
+    private String currentAsoName = "N/A";
+    private String currentAsoUser = "N/A";
 
-    private FirebaseDatabase database;
+    private FirebaseDatabase database; // instancia de la base de datos
 
-    private DatabaseReference myRef;
+    private DatabaseReference myRef; // referencia a la base de datos
 
-    private MainScreen mainScreen;
+    private MainScreen mainScreen; // referencia a la pantalla principal
 
-
-
+    // Constructor privado para evitar que se puedan crear instancias desde otras
     private SingleFirebase() {
-        loadEventList();
         currentUserCarnet = null;
         currentUserType = 1;
         currentAsoName = null;
@@ -65,9 +63,11 @@ public class SingleFirebase {
         eventModelHashMap = new HashMap<String, EventModel>();
     }
 
+    // Getters y setters
     public int getCurrentUserType() {
         return currentUserType;
     }
+
     public void setCurrentUserType(int currentUserType) {
         this.currentUserType = currentUserType;
     }
@@ -75,13 +75,23 @@ public class SingleFirebase {
     public String getCurrentUserCarnet() {
         return currentUserCarnet;
     }
+
     public void setCurrentUserCarnet(String currentUserCarnet) {
         this.currentUserCarnet = currentUserCarnet;
+    }
+
+    public String getCurrentUsername() {
+        return currentUsername;
+    }
+
+    public void setCurrentUsername(String currentUsername) {
+        this.currentUsername = currentUsername;
     }
 
     public String getCurrentUserEmail() {
         return currentUserEmail;
     }
+
     public void setCurrentUserEmail(String currentUserEmail) {
         this.currentUserEmail = currentUserEmail;
     }
@@ -93,6 +103,7 @@ public class SingleFirebase {
     public void setCurrentAsoName(String currentAsoName) {
         this.currentAsoName = currentAsoName;
     }
+
     public String getCurrentAsoUser() {
         return currentAsoUser;
     }
@@ -130,7 +141,8 @@ public class SingleFirebase {
         return instance;
     }
 
-    public void logout(Context context){
+    // método para cerrar sesión
+    public void logout(Context context) {
         currentUserCarnet = null;
         currentUserType = 1;
         currentAsoName = null;
@@ -139,11 +151,13 @@ public class SingleFirebase {
         context.startActivity(siguiente);
     }
 
-    public void refreshEventList(){
+    // descarga lista de eventos de firebase
+    public void refreshEventList() {
         // descarga lista de eventos de firebase
         eventModelArrayList = new ArrayList<EventModel>();
         eventModelHashMap = new HashMap<String, EventModel>();
 
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
         myRef.child("eventos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -151,12 +165,12 @@ public class SingleFirebase {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
+                } else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    HashMap<String, HashMap<?, ?>> events = (HashMap<String, HashMap<?, ?>>) task.getResult().getValue();
+                    HashMap<String, HashMap<?, ?>> events = (HashMap<String, HashMap<?, ?>>) task.getResult()
+                            .getValue();
                     Set<String> eventIds = events.keySet();
-                    for (String eventId : eventIds){
+                    for (String eventId : eventIds) {
                         HashMap<?, ?> event = events.get(eventId);
                         String titulo = event.get("titulo").toString();
 
@@ -179,25 +193,27 @@ public class SingleFirebase {
                         List<CollabModel> colabs = new ArrayList<CollabModel>();
                         ActivityModel activity;
 
-                        for (HashMap<String, ?> activityMap : activitiesList){
-                                String dateActivity = activityMap.get("date").toString();
-                                String time = activityMap.get("time").toString();
-                                String title = activityMap.get("title").toString();
-                                String moder = activityMap.get("moder").toString();
-                                activity = new ActivityModel(dateActivity, time, title, moder);
-                                activities.add(activity);
+                        for (HashMap<String, ?> activityMap : activitiesList) {
+                            String dateActivity = activityMap.get("date").toString();
+                            String time = activityMap.get("time").toString();
+                            String title = activityMap.get("title").toString();
+                            String moder = activityMap.get("moder").toString();
+                            activity = new ActivityModel(dateActivity, time, title, moder);
+                            activities.add(activity);
 
                         }
                         CollabModel collab;
-                        for (HashMap<String, ?> colabMap : colabsList){
-                                String job = colabMap.get("job").toString();
-                                String name = colabMap.get("name").toString();
-                                Integer profileImage = Integer.parseInt(colabMap.get("profileImage").toString());
-                                collab = new CollabModel(name, job, profileImage);
-                                colabs.add(collab);
+                        for (HashMap<String, ?> colabMap : colabsList) {
+                            String job = colabMap.get("job").toString();
+                            String name = colabMap.get("name").toString();
+                            Integer profileImage = Integer.parseInt(colabMap.get("profileImage").toString());
+                            collab = new CollabModel(name, job, profileImage);
+                            colabs.add(collab);
                         }
 
-                        EventModel eventModel = new EventModel(eventId, titulo, date, nombreAsociacion, capacidad, imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares, activities, colabs, clicks, cupos, userAsociacion);
+                        EventModel eventModel = new EventModel(eventId, titulo, date, nombreAsociacion, capacidad,
+                                imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares,
+                                activities, colabs, clicks, cupos, userAsociacion);
                         eventModelArrayList.add(eventModel);
                         eventModelHashMap.put(eventId, eventModel);
                     }
@@ -207,95 +223,49 @@ public class SingleFirebase {
         });
     }
 
-
-
-    private void loadEventList(){
-        // descargar eventos de firebase
-        refreshEventList();
-//        ArrayList<String> categories = new ArrayList<String>();
-//        categories.add("Musica");
-//        categories.add("Premios");
-//        categories.add("Tecnologia");
-//
-//        this.eventModelArrayList = new ArrayList<EventModel>();
-//        EventModel event1 = new EventModel("Semana ATI", "Asocia de ATI", 500, R.drawable.des, categories, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "Ser estudiante", "02/09/2023", "09/09/2023");
-//        EventModel event2 = new EventModel("Semana Compu", "Asocia de Compu", 500, R.drawable.no_image, categories, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "Ser estudiante", "10/09/2023", "17/09/2023");
-//
-//        ArrayList<CollabModel> collabs1 = new ArrayList<CollabModel>();
-//        ArrayList<CollabModel> collabs2 = new ArrayList<CollabModel>();
-//
-//        CollabModel collab0 = new CollabModel("Asocia de ATI", "Asociación", R.drawable.no_image);
-//        CollabModel collab1 = new CollabModel("Raul", "Moderador", R.drawable.no_image);
-//        CollabModel collab2 = new CollabModel("Miguel", "Moderador", R.drawable.no_image);
-//        collabs1.add(collab0);
-//        collabs1.add(collab1);
-//        collabs1.add(collab2);
-//        event1.setCollabModelArrayList(collabs1);
-//
-//        CollabModel collab3 = new CollabModel("Asocia de Compu", "Asociación", R.drawable.no_image);
-//        CollabModel collab4 = new CollabModel("Saul", "Moderador", R.drawable.no_image);
-//        CollabModel collab5 = new CollabModel("Juan", "Moderador", R.drawable.no_image);
-//        collabs2.add(collab3);
-//        collabs2.add(collab4);
-//        collabs2.add(collab5);
-//        event2.setCollabModelArrayList(collabs2);
-//
-//        ArrayList<ActivityModel> acts1 = new ArrayList<ActivityModel>();
-//        ArrayList<ActivityModel> acts2 = new ArrayList<ActivityModel>();
-//
-//        ActivityModel act1 = new ActivityModel("03/09/2023", "11:00 am", "Bingo", "Juan");
-//        ActivityModel act2 = new ActivityModel("03/09/2023", "12:00 am", "Baile", "Juancho");
-//        ActivityModel act3 = new ActivityModel("04/09/2023", "11:30 am", "Torneo", "Juanpa");
-//        acts1.add(act1);
-//        acts1.add(act2);
-//        acts1.add(act3);
-//        event1.setActivityModelArrayList(acts1);
-//
-//        ActivityModel act4 = new ActivityModel("13/09/2023", "11:00 am", "Bingo", "Ale");
-//        ActivityModel act5 = new ActivityModel("13/09/2023", "12:00 am", "Baile", "Alex");
-//        ActivityModel act6 = new ActivityModel("14/09/2023", "11:30 am", "Torneo", "Alejo");
-//        acts2.add(act4);
-//        acts2.add(act5);
-//        acts2.add(act6);
-//        event2.setActivityModelArrayList(acts2);
-//
-//        eventModelArrayList.add(event1);
-//        eventModelArrayList.add(event2);
-    }
-
-
-
-    public void uploadEvent(View mainView, Context context, String titulo, int capacidad, int imagenSrc, List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin, String lugares, List<ActivityModel> activities, List<CollabModel> colabs){
+    // carga lista de eventos de firebase
+    public void uploadEvent(View mainView, Context context, String titulo, int capacidad, int imagenSrc,
+            List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin,
+            String lugares, List<ActivityModel> activities, List<CollabModel> colabs) {
         try {
+            // TODO: comenten esta obra arquitectonica de la ingenieria de software
             myRef.child("users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if (!task.isSuccessful()) {
                         Log.e("firebase", "Error getting data", task.getException());
-                    }
-                    else {
+                    } else {
                         boolean notExists = true;
-                        HashMap<String, HashMap<?, ?>> users = (HashMap<String, HashMap<?, ?>>)task.getResult().getValue();
+                        HashMap<String, HashMap<?, ?>> users = (HashMap<String, HashMap<?, ?>>) task.getResult()
+                                .getValue();
                         Set<String> carnetUsers = users.keySet();
-                        for(CollabModel colab : colabs){
-                            for (String carnet : carnetUsers){
-                                if (users.get(carnet).get("name").equals(colab.getName())){
+                        for (CollabModel colab : colabs) {
+                            for (String carnet : carnetUsers) {
+                                if (users.get(carnet).get("name").equals(colab.getName())) {
                                     notExists = false;
                                     break;
                                 }
                             }
 
                         }
-                        if (notExists){
-                            Toast.makeText(context, "ERROR: Alguno de los colaboradores no existe.", Toast.LENGTH_LONG).show();
+                        if (notExists) {
+                            Toast.makeText(context, "ERROR: Alguno de los colaboradores no existe.", Toast.LENGTH_LONG)
+                                    .show();
                         } else {
-                            DatabaseReference eventNode = myRef.child("eventos").push();
+                            String path = (currentUserType == 1) ? "eventos" : "propuestas";
+                            String displayName = (currentUserType == 1) ? currentAsoName : currentUsername;
+                            String currentUser = (currentUserType == 1) ? currentAsoUser : currentUserCarnet;
+
+                            DatabaseReference eventNode = myRef.child(path).push();
+
                             String eventId = eventNode.getKey();
-                            EventModel event = new EventModel(eventId, titulo, currentAsoUser, currentAsoName, capacidad, imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares, activities, colabs, 0, 0);
+                            EventModel event = new EventModel(eventId, titulo, currentUser, displayName, capacidad,
+                                    imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares,
+                                    activities, colabs, 0, 0);
                             eventModelArrayList.add(event);
                             eventModelHashMap.put(eventId, event);
                             eventNode.setValue(event);
-                            Toast.makeText( context, "Evento creado con éxito.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Evento creado con éxito.", Toast.LENGTH_LONG).show();
 
                             EditText title = mainView.findViewById(R.id.editTextText);
                             EditText description = mainView.findViewById(R.id.editTextTextMultiLine);
@@ -321,12 +291,13 @@ public class SingleFirebase {
                     }
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(context, "ERROR creando evento.", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void incrementarClicksEvento(EventModel event){
+    // incrementa el numero de clicks de un evento
+    public void incrementarClicksEvento(EventModel event) {
         Map<String, Object> updates = new HashMap<>();
         updates.put("eventos/" + event.getEventId() + "/clicks", ServerValue.increment(1));
         myRef.updateChildren(updates);

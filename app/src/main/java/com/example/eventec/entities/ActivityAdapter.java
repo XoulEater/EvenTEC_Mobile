@@ -14,10 +14,11 @@ import com.example.eventec.R;
 
 import java.util.List;
 
+
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Viewholder> {
 
-    private final Context context;
-    private final List<ActivityModel> activityModelArrayList;
+    private final Context context; // Context
+    private final List<ActivityModel> activityModelArrayList; // Array list for recycler view items
 
     // Constructor
     public ActivityAdapter(Context context, List<ActivityModel> activityModelArrayList) {
@@ -27,6 +28,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Viewho
 
     @NonNull
     @Override
+    // Inflates the layout when ViewHolder is created
     public ActivityAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // to inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_activity_layout, parent, false);
@@ -34,16 +36,16 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Viewho
     }
 
     @Override
+    // Binds data to the TextView in each row
     public void onBindViewHolder(@NonNull ActivityAdapter.Viewholder holder, int position) {
         // to set data to textview and imageview of each card layout
         ActivityModel model = activityModelArrayList.get(position);
-
         holder.dateTV.setText(model.getDate());
         holder.timeTV.setText(model.getTime());
         holder.actTitleTV.setText(model.getTitle());
         holder.modTV.setText(model.getModer());
 
-
+        // implement setOnClickListener event on item of recycler view.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,6 +56,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Viewho
     }
 
     @Override
+    // This method returns the size of recycler view items.
     public int getItemCount() {
         // this method is used for showing number of card items in recycler view
         return activityModelArrayList.size();

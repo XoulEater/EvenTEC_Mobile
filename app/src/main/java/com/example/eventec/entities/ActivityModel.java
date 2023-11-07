@@ -1,5 +1,6 @@
 package com.example.eventec.entities;
 
+// Model class for recycler view items
 public class ActivityModel {
     private String date;
     private String time;
@@ -13,10 +14,10 @@ public class ActivityModel {
         this.moder = moder;
     }
 
+    // Getter and setter methods
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }

@@ -13,10 +13,10 @@ import android.widget.LinearLayout;
 import com.example.eventec.R;
 import com.example.eventec.entities.SingleFirebase;
 
-
+// Pantalla de inicio de la aplicacion
 public class StartActivity extends AppCompatActivity {
 
-    private int currentOption = 0;
+    private int currentOption = 0; // 0 = Estudiante, 2 = Asociacion
     private CardView cardViewEstudiante;
     private CardView cardViewAsociacion;
     private LinearLayout layoutEstudiante;
@@ -29,12 +29,11 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        // Obtener los elementos de la interfaz
         cardViewEstudiante = findViewById(R.id.cardView1);
         cardViewAsociacion = findViewById(R.id.cardView3);
-
         layoutEstudiante = findViewById(R.id.linearLayout1);
         layoutAsociacion = findViewById(R.id.linearLayout3);
-
         ivEstudiante = findViewById(R.id.imageView1);
         ivAsociacion = findViewById(R.id.imageView3);
 
@@ -42,6 +41,7 @@ public class StartActivity extends AppCompatActivity {
 //        SingleFirebase singleFirebase = SingleFirebase.getInstance();
 //        singleFirebase.refreshEventList();
 
+        // Cambiar el color de la cardview y el icono al seleccionar una opcion
         cardViewEstudiante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,13 +65,12 @@ public class StartActivity extends AppCompatActivity {
     }
 
 
-
+    // Ir a la pantalla de login o registro dependiendo de la opcion seleccionada
     public void login (View view){
-        Intent siguiente = new Intent(this, Login.class);
-        siguiente.putExtra("userType", currentOption);
-        startActivity(siguiente);
+        Intent siguiente = new Intent(this, Login.class); // Cambiar por la pantalla de login
+        siguiente.putExtra("userType", currentOption); // Enviar el tipo de usuario seleccionado
+        startActivity(siguiente); // Iniciar la siguiente actividad
     }
-
     public void registro (View view){
         Intent siguiente = new Intent(this, Registro.class);
         siguiente.putExtra("userType", currentOption);
