@@ -333,4 +333,8 @@ public class SingleFirebase {
         event.incrementClicks();
     }
 
+    // Consigue un evento por su id del hashMap de eventos
+    public EventModel getEventById(String eventId){
+        return eventModelHashMap.get(eventId);
+    }
 }

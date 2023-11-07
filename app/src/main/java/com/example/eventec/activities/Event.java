@@ -187,4 +187,10 @@ public class Event extends AppCompatActivity {
             Log.d("TEST", String.valueOf(asociacionOwner));
         }
     }
+
+    public void goReview(View view){
+        Intent intent = new Intent(this, Cuestionario.class);
+        intent.putExtra("eventId", model.getEventId());
+        startActivity(intent);
+    }
 }

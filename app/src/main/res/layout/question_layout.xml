@@ -25,11 +25,19 @@
                 android:id="@+id/activityTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Torneo de Fortnite"
+                android:text="Title"
 
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/activityQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Question"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                />
             <Spinner
                 android:id="@+id/ratings_spinner"
                 android:layout_width="match_parent"
