@@ -25,11 +25,11 @@ import java.util.Properties;
 
 import com.google.zxing.WriterException;
 
+
 public class SendMail {
     private String toEmail;
     private String subject;
     private String message;
-
     private String QRData;
 
     public SendMail(String toEmail, String subject, String message) {
@@ -41,6 +41,7 @@ public class SendMail {
     public void setQRData(String QRData) {
         this.QRData = QRData;
     }
+
 
     public void execute() {
         new AsyncTask<Void, Void, Void>() {

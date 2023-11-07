@@ -182,6 +182,8 @@ public class EventsCreator extends Fragment {
                     String lugares = places.getText().toString();
                     SingleFirebase singleFirebase = SingleFirebase.getInstance();
                     String asociacionName = singleFirebase.getCurrentAsoName();
+
+
                     // Upload event to Firebase
                     if (!titulo.isEmpty() && !descripcion.isEmpty() && !requisitos.isEmpty() && !categorias.isEmpty() &&
                             !fechaInicio.isEmpty() && !fechaFin.isEmpty() && !lugares.isEmpty() && !activities.isEmpty()

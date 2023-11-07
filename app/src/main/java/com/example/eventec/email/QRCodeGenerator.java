@@ -8,6 +8,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+// https://www.callicoder.com/generate-qr-code-in-java-using-zxing/
 public class QRCodeGenerator {
     public static Bitmap generateQRCodeImage(String id, int width, int height)
             throws WriterException {

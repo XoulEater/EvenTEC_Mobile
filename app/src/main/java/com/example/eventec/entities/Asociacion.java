@@ -2,6 +2,7 @@ package com.example.eventec.entities;
 
 import java.util.List;
 
+
 public class Asociacion {
     private String nombreAso;
     private String userAso;

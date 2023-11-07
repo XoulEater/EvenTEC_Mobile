@@ -29,25 +29,28 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// Clase para la actividad de perfil de asociación.
 public class Perfil extends AppCompatActivity {
 
-    private SingleFirebase singleFirebase;
-
-    private boolean editing;
+    private SingleFirebase singleFirebase; // Instancia de la clase SingleFirebase.
+    private boolean editing; // Variable para saber si se está editando o no.
     private String asoName;
     private String asoUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil);
+        setContentView(R.layout.activity_perfil); // Se establece el layout de la actividad.
 
-        singleFirebase = SingleFirebase.getInstance();
+        singleFirebase = SingleFirebase.getInstance(); // Se obtiene la instancia de la clase SingleFirebase.
 
+        // Se obtienen los datos de la asociación actual.
         asoUser = singleFirebase.getCurrentAsoUser();
         asoName = singleFirebase.getCurrentAsoName();
         DatabaseReference myRef = singleFirebase.getMyRef();
 
         editing = false;
+        // Se obtienen los datos de la asociación actual.
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         myRef.child("asociaciones").child(asoUser).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -90,6 +93,7 @@ public class Perfil extends AppCompatActivity {
         });
     }
 
+    // Método para validar el email.
     private boolean isValidEmail(String email){
         // Expresión regular para validar email.
         String regex;
@@ -103,7 +107,9 @@ public class Perfil extends AppCompatActivity {
         return matcher.find();
     }
 
+    // Método para actualizar los datos de la asociación.
     private void updateAsociacion(String userAso, String nombreAso, String carrera, String password, String email, String phone, String descripcion, List<String> miembros) {
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         DatabaseReference myRef = singleFirebase.getMyRef();
         Asociacion asociacion = new Asociacion(userAso, nombreAso, carrera, password, email, phone, descripcion, miembros);
         Log.d("TEST", nombreAso);
@@ -178,6 +184,7 @@ public class Perfil extends AppCompatActivity {
         });
     }
 
+    // Método para ir a la actividad de crear evento.
     public void editar(View view){
         if (editing) {
             TextView nombreAsoText = findViewById(R.id.aso);
@@ -232,6 +239,7 @@ public class Perfil extends AppCompatActivity {
         }
     }
 
+    // Método para eliminar la asociación.
     public void eliminar(View view){
         DatabaseReference myRef = singleFirebase.getMyRef();
         myRef.child("asociaciones").child(asoUser).child("enabled").setValue(false).addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -29,13 +29,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// Pantalla de registro de usuario
 public class Registro extends AppCompatActivity {
     private int currentUserType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUserType = getIntent().getIntExtra("userType", 0);
+        currentUserType = getIntent().getIntExtra("userType", 0); // 1 = N/A, 2 = Asociacion, 3 = Estudiante
 
+        // Cambiar el layout dependiendo del tipo de usuario
         switch (currentUserType) {
             case 1:
                 break;
@@ -47,6 +49,7 @@ public class Registro extends AppCompatActivity {
         }
     }
 
+    // Validar que el correo tenga el formato correcto
     private boolean isValidEmail(String email){
         // Expresión regular para validar email.
         String regex;
@@ -65,11 +68,14 @@ public class Registro extends AppCompatActivity {
         return matcher.find();
     }
 
+    // Registrar una asociacion
     private void registerAsociacion(String userAso, String nombreAso, String carrera, String password, String email, String phone, String descripcion, List<String> miembros) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
+        FirebaseDatabase database = FirebaseDatabase.getInstance(); // Instancia de la base de datos
+        DatabaseReference myRef = database.getReference(); // Referencia a la base de datos
         Asociacion asociacion = new Asociacion(userAso, nombreAso, carrera, password, email, phone, descripcion, miembros);
 
+        // Verificar que no exista una asociacion con el mismo nombre
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         myRef.child("asociaciones").child(userAso).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -115,12 +121,14 @@ public class Registro extends AppCompatActivity {
 
     }
 
-
+    // Registrar un usuario
     private void registerUser(String name, String carnet, String password, String email, String phone, String sede, String carrera){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
+        FirebaseDatabase database = FirebaseDatabase.getInstance(); // Instancia de la base de datos
+        DatabaseReference myRef = database.getReference(); //  Referencia a la base de datos
         User user = new User(name, carnet, password, email, phone, sede, carrera);
 
+        // Verificar que no exista un usuario con el mismo carnet
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         myRef.child("users").child(carnet).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -142,7 +150,11 @@ public class Registro extends AppCompatActivity {
             }
         });
     }
+
+    // Registrar un usuario o asociacion dependiendo del tipo de usuario
     public void registrarse(View view){
+        // Obtener los datos de la interfaz
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         switch (currentUserType) {
             case 1:
                 break;

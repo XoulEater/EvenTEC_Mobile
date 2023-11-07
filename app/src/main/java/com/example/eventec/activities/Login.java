@@ -17,15 +17,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+// Clase que maneja el login de los usuarios
 public class Login extends AppCompatActivity {
-    private int currentUserType;
-    private SingleFirebase singleFirebase;
+    private int currentUserType; // 0 = Estudiante, 2 = Asociacion
+    private SingleFirebase singleFirebase; // Instancia de la clase SingleFirebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUserType = getIntent().getIntExtra("userType", 0);
-        singleFirebase = SingleFirebase.getInstance();
+        currentUserType = getIntent().getIntExtra("userType", 0); // Obtener el tipo de usuario
+        singleFirebase = SingleFirebase.getInstance(); // Obtener la instancia de SingleFirebase
+        // Dependiendo del tipo de usuario, se muestra una interfaz diferente
         switch (currentUserType){
             case 1:
                 break;
@@ -37,6 +39,8 @@ public class Login extends AppCompatActivity {
         }
 
     }
+
+    // Función que lleva a la pantalla de registro.
     public void registro (View view){
         Intent siguiente = new Intent(this, Registro.class);
         siguiente.putExtra("userType", currentUserType);
@@ -45,9 +49,11 @@ public class Login extends AppCompatActivity {
 
     // Función que valida con Firebase.
     public void login (View view){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
+        FirebaseDatabase database = FirebaseDatabase.getInstance(); // Instancia de la base de datos
+        DatabaseReference myRef = database.getReference(); //  Referencia a la base de datos
 
+        // Dependiendo del tipo de usuario, se valida de una manera diferente
+        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         switch (currentUserType){
             case 1:
                 break;
@@ -67,9 +73,9 @@ public class Login extends AppCompatActivity {
                             DataSnapshot dataSnapshot = task.getResult();
                             if (dataSnapshot.exists()){
                                 if (dataSnapshot.child("password").getValue().toString().equals(password) && dataSnapshot.child("enabled").getValue().equals(true)){
-                                    singleFirebase.setCurrentAsoUser(asocianame);
-                                    singleFirebase.setCurrentAsoName(dataSnapshot.child("nombreAso").getValue().toString());
-                                    singleFirebase.setCurrentUserType(currentUserType);
+                                    singleFirebase.setCurrentAsoUser(asocianame); // Guardar el usuario de la asociación
+                                    singleFirebase.setCurrentAsoName(dataSnapshot.child("nombreAso").getValue().toString()); // Guardar el nombre de la asociación
+                                    singleFirebase.setCurrentUserType(currentUserType); // Guardar el tipo de usuario
                                     continuar(view);
                                 } else {
                                     Toast.makeText(Login.this, "Contraseña incorrecta o asociación fue borrada", Toast.LENGTH_LONG).show();
@@ -97,9 +103,10 @@ public class Login extends AppCompatActivity {
                             DataSnapshot dataSnapshot = task.getResult();
                             if (dataSnapshot.exists()){
                                 if (dataSnapshot.child("password").getValue().toString().equals(passwordUser)){
-                                    singleFirebase.setCurrentUserCarnet(carnet);
-                                    singleFirebase.setCurrentUserType(currentUserType);
-                                    singleFirebase.setCurrentUserEmail(dataSnapshot.child("email").getValue().toString());
+                                    singleFirebase.setCurrentUserCarnet(carnet); // Guardar el carnet del usuario
+                                    singleFirebase.setCurrentUserType(currentUserType); // Guardar el tipo de usuario
+                                    singleFirebase.setCurrentUserEmail(dataSnapshot.child("email").getValue().toString()); // Guardar el correo del usuario
+                                    singleFirebase.setCurrentUsername(dataSnapshot.child("username").getValue().toString()); // Guardar el nombre de usuario
                                     continuar(view);
                                 } else {
                                     Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
@@ -113,6 +120,7 @@ public class Login extends AppCompatActivity {
                 break;
         }
     }
+    // Función que lleva a la pantalla principal.
     public void continuar(View view){
         Intent siguiente = new Intent(this, MainScreen.class);
         siguiente.putExtra("userType", currentUserType);
