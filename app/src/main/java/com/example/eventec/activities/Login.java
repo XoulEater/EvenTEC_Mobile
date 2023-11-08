@@ -106,7 +106,7 @@ public class Login extends AppCompatActivity {
                                     singleFirebase.setCurrentUserCarnet(carnet); // Guardar el carnet del usuario
                                     singleFirebase.setCurrentUserType(currentUserType); // Guardar el tipo de usuario
                                     singleFirebase.setCurrentUserEmail(dataSnapshot.child("email").getValue().toString()); // Guardar el correo del usuario
-                                    singleFirebase.setCurrentUsername(dataSnapshot.child("username").getValue().toString()); // Guardar el nombre de usuario
+                                    singleFirebase.setCurrentUsername(dataSnapshot.child("name").getValue().toString()); // Guardar el nombre de usuario
                                     continuar(view);
                                 } else {
                                     Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();

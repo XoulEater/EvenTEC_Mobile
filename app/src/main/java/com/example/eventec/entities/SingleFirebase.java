@@ -61,6 +61,7 @@ public class SingleFirebase {
         myRef = database.getReference();
         eventModelArrayList = new ArrayList<EventModel>();
         eventModelHashMap = new HashMap<String, EventModel>();
+        refreshEventList();
     }
 
     // Getters y setters
