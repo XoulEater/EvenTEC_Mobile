@@ -100,7 +100,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/button_background"
                 android:gravity="center"
-                android:onClick="reservar"
+                android:onClick="sendReview"
                 android:text="Enviar"
                 android:textAlignment="center"
                 android:textColor="@color/white"
