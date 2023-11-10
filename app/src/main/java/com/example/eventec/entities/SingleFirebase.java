@@ -158,9 +158,9 @@ public class SingleFirebase {
         eventModelArrayList = new ArrayList<EventModel>();
         eventModelHashMap = new HashMap<String, EventModel>();
 
-        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
+        // Se leen los eventos
         myRef.child("eventos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -171,6 +171,8 @@ public class SingleFirebase {
                     HashMap<String, HashMap<?, ?>> events = (HashMap<String, HashMap<?, ?>>) task.getResult()
                             .getValue();
                     Set<String> eventIds = events.keySet();
+
+                    // Por cada evento, se obtienen los campos y se crea un objeto EventModel y se agrega a la lista y el hashmap.
                     for (String eventId : eventIds) {
                         HashMap<?, ?> event = events.get(eventId);
                         String titulo = event.get("titulo").toString();
@@ -194,6 +196,7 @@ public class SingleFirebase {
                         List<CollabModel> colabs = new ArrayList<CollabModel>();
                         ActivityModel activity;
 
+                        // Por cada actividad, se crea un objeto nuevo
                         for (HashMap<String, ?> activityMap : activitiesList) {
                             String dateActivity = activityMap.get("date").toString();
                             String time = activityMap.get("time").toString();
@@ -203,6 +206,8 @@ public class SingleFirebase {
                             activities.add(activity);
 
                         }
+
+                        // Por cada colaborador, se crea un objeto nuevo.
                         CollabModel collab;
                         for (HashMap<String, ?> colabMap : colabsList) {
                             String job = colabMap.get("job").toString();
@@ -229,7 +234,8 @@ public class SingleFirebase {
             List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin,
             String lugares, List<ActivityModel> activities, List<CollabModel> colabs) {
         try {
-            // TODO: comenten esta obra arquitectonica de la ingenieria de software
+
+            // Se leen los usuarios para verificar los colaboradores.
             myRef.child("users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -240,6 +246,8 @@ public class SingleFirebase {
                         HashMap<String, HashMap<?, ?>> users = (HashMap<String, HashMap<?, ?>>) task.getResult()
                                 .getValue();
                         Set<String> carnetUsers = users.keySet();
+
+                        // Se busca el colaborador por nombre para verificar si existe.
                         for (CollabModel colab : colabs) {
                             for (String carnet : carnetUsers) {
                                 if (users.get(carnet).get("name").equals(colab.getName())) {
@@ -249,10 +257,14 @@ public class SingleFirebase {
                             }
 
                         }
+                        // Si alguno no existe, se envía el error.
                         if (notExists) {
                             Toast.makeText(context, "ERROR: Alguno de los colaboradores no existe.", Toast.LENGTH_LONG)
                                     .show();
                         } else {
+                            // Si todos existen, se crea el evento.
+                            // Se revisa si el que lo crea es una asociación. Si es una asociación, es un evento.
+                            // Si es un estudiante, es una propuesta.
                             String path = (currentUserType == 1) ? "eventos" : "propuestas";
                             String displayName = (currentUserType == 1) ? currentAsoName : currentUsername;
                             String currentUser = (currentUserType == 1) ? currentAsoUser : currentUserCarnet;
@@ -260,14 +272,16 @@ public class SingleFirebase {
                             DatabaseReference eventNode = myRef.child(path).push();
 
                             String eventId = eventNode.getKey();
+                            // Se crea un nuevo objeto con la información del evento.
                             EventModel event = new EventModel(eventId, titulo, currentUser, displayName, capacidad,
                                     imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares,
                                     activities, colabs, 0, 0);
                             eventModelArrayList.add(event);
                             eventModelHashMap.put(eventId, event);
-                            eventNode.setValue(event);
+                            eventNode.setValue(event); // Se sube a Firebase
                             Toast.makeText(context, "Evento creado con éxito.", Toast.LENGTH_LONG).show();
 
+                            // Se limpian los campos
                             EditText title = mainView.findViewById(R.id.editTextText);
                             EditText description = mainView.findViewById(R.id.editTextTextMultiLine);
                             EditText requirements = mainView.findViewById(R.id.editTextTextMultiLine2);

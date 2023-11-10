@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+// Actividad para los cuestionarios y retroalimentación
 public class Cuestionario extends AppCompatActivity {
 
     private EventModel evento;
@@ -45,17 +46,18 @@ public class Cuestionario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuestionario);
 
-        Intent intent = getIntent();
+        Intent intent = getIntent(); // Lee el eventId
         String eventId = intent.getStringExtra("eventId");
 
         singleFirebase = SingleFirebase.getInstance();
-        evento = singleFirebase.getEventById(eventId);
+        evento = singleFirebase.getEventById(eventId); // Obtiene el evento
 
         TextView eventoTitle = findViewById(R.id.title);
         eventoTitle.setText(evento.getTitulo());
 
         List<ActivityModel> activities = evento.getActivities();
 
+        // Lista con las preguntas
         ArrayList<QuestionModel> questionModelArrayList = new ArrayList<>();
         questionModelArrayList.add(new QuestionModel("Evento", "¿Qué te pareció el evento?"));
 
@@ -63,6 +65,7 @@ public class Cuestionario extends AppCompatActivity {
             questionModelArrayList.add(new QuestionModel(activity.getTitle(), "¿Qué te pareció la actividad?"));
         }
 
+        // Inicializa el RecyclerView para las preguntas
         RecyclerView activityRatings = findViewById(R.id.activityRatings);
 
         QuestionAdapter questionAdapter = new QuestionAdapter(this, questionModelArrayList);
@@ -73,27 +76,32 @@ public class Cuestionario extends AppCompatActivity {
     }
 
 
+    // Función que guarda una evaluación
     public void sendReview(View view){
         String eventId = evento.getEventId();
 
-        // Create a SimpleDateFormat with the dd/MM/yyyy HH:mm:ss format
+        // Crear un SimpleDateFormat con dd/MM/yyyy HH:mm:ss formato
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
 
-        // Get the current date and time
+        // Obtener la fecha y hora actual
         Date fecha = new Date();
 
-        // Format the date and time as a string
+        // Formatear la fecha como String
         String fechaString = sdf.format(fecha);
+
+        // Obtener el comentario
         EditText comentarioText = findViewById(R.id.comentario);
+        // Se crea un objeto comentario
         Comment comment = new Comment(comentarioText.getText().toString(), eventId, fechaString, singleFirebase.getCurrentUsername());
 
         RecyclerView activityRatings = findViewById(R.id.activityRatings);
         QuestionAdapter questionAdapter = (QuestionAdapter) activityRatings.getAdapter();
         RecyclerView.LayoutManager layoutManager = activityRatings.getLayoutManager();
-
+        // Se obtiene la lista de respuestas del adapter
         List<QuestionModel> questionModelArrayList = questionAdapter.getQuestionModelArrayList();
         DatabaseReference myRef = singleFirebase.getMyRef();
 
+        // Se leen los ratings que tiene el evento
         myRef.child("ratings").child(eventId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -101,22 +109,29 @@ public class Cuestionario extends AppCompatActivity {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    // Se obtienen los ratings
                     HashMap<String, HashMap<String, Long>> ratings = new HashMap<>();
                     if (task.getResult().exists()){
+                        // Si hay ratings, se guardan en el HashMap
                         ratings = (HashMap<String, HashMap<String, Long>>) task.getResult().getValue();
+                        // Por cada rating
                         for(int i = 0; i < questionModelArrayList.size(); i++) {
+                            // Se obtiene la pregunta
                             QuestionModel question = questionModelArrayList.get(i);
                             View questionView = layoutManager.findViewByPosition(i);
 
+                            // Se lee la opción seleccionada
                             Spinner ratings_spinner = questionView.findViewById(R.id.ratings_spinner);
                             long rating = Integer.parseInt(ratings_spinner.getSelectedItem().toString());
+
                             HashMap<String, Long> activityInfo = ratings.get(question.getTitle());
+                            // Se incrementa la cantidad y se suma el rating a la suma acumulada
                             long cantidad = activityInfo.get("cantidad") + 1;
                             activityInfo.put("cantidad", cantidad);
                             activityInfo.put("suma", activityInfo.get("suma") + rating);
                         }
                     } else {
+                        // Si no hay ratings, se agrega el rating y un 1 al HashMap para empezar a contarlos.
                         for (int i = 0; i < questionModelArrayList.size(); i++) {
                             QuestionModel question = questionModelArrayList.get(i);
                             View questionView = layoutManager.findViewByPosition(i);
@@ -131,12 +146,13 @@ public class Cuestionario extends AppCompatActivity {
                             ratings.put(question.getTitle(), activityInfo);
                         }
                     }
-                    Log.d("TEST", ratings.toString());
+
+                    // Se guardan los ratings en la base de datos
                     myRef.child("ratings").child(eventId).setValue(ratings);
                     String commentKey = myRef.child("comments").child(eventId).push().getKey();
                     myRef.child("comments").child(eventId).child(commentKey).setValue(comment);
                     Toast.makeText(Cuestionario.this, "Gracias por tu comentario", Toast.LENGTH_LONG).show();
-                    finish();
+                    finish(); // Se devuelve al activity anterior
                 }
             }
         });

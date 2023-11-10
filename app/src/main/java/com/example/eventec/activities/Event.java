@@ -61,7 +61,7 @@ public class Event extends AppCompatActivity {
 
         // Verificar si el usuario está inscrito en el evento
         // TODO: comenten esta obra arquitectonica de la ingenieria de software
-        if (singleFirebase.getCurrentUserType() == 0){
+        if (singleFirebase.getCurrentUserType() == 0) {
 
             String currentCarnet = singleFirebase.getCurrentUserCarnet();
             DatabaseReference myRef = singleFirebase.getMyRef();
@@ -70,14 +70,13 @@ public class Event extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if (!task.isSuccessful()) {
                         Log.e("firebase", "Error getting data", task.getException());
-                    }
-                    else {
-                        if (task.getResult().exists() && task.getResult().getValue().equals(true)){
+                    } else {
+                        if (task.getResult().exists() && task.getResult().getValue().equals(true)) {
                             Log.d("firebase", String.valueOf(task.getResult().getValue()));
                             reservarBtn.setText("Cancelar");
                             userInscrito = true;
                         } else {
-                            if (model.getCupos() == model.getCapacidad()){
+                            if (model.getCupos() == model.getCapacidad()) {
                                 reservarBtn.setEnabled(false);
                                 reservarBtn.setText("Cupos llenos");
                             } else {
@@ -89,8 +88,11 @@ public class Event extends AppCompatActivity {
                     }
                 }
             });
-        } else if (singleFirebase.getCurrentUserType() == 2){
-            if (model.getUserAsociacion().equals(singleFirebase.getCurrentAsoUser())){
+        } else if (singleFirebase.getCurrentUserType() == 2) {
+            TextView reviewBtn = findViewById(R.id.reviewBtn);
+            reviewBtn.setVisibility(View.INVISIBLE);
+
+            if (model.getUserAsociacion().equals(singleFirebase.getCurrentAsoUser())) {
                 reservarBtn.setText("Ver asistentes");
                 asociacionOwner = true;
             } else {
@@ -102,8 +104,9 @@ public class Event extends AppCompatActivity {
     }
 
     // Cargar los colaboradores del evento
-    private void loadCollabs(){
-        RecyclerView collabsRV = findViewById(R.id.collabsRV);; // Obtener el RecyclerView
+    private void loadCollabs() {
+        RecyclerView collabsRV = findViewById(R.id.collabsRV);
+        ; // Obtener el RecyclerView
         List<CollabModel> collabModelArrayList = model.getColabs(); // Obtener la lista de colaboradores
         CollabAdapter collabAdapter = new CollabAdapter(this, collabModelArrayList); // Crear el adaptador
 
@@ -116,7 +119,7 @@ public class Event extends AppCompatActivity {
     }
 
     // Cargar las actividades del evento
-    private void loadActivities(){
+    private void loadActivities() {
         RecyclerView activitiesRV = findViewById(R.id.activitiesRV); // Obtener el RecyclerView
         List<ActivityModel> activityModelArrayList = model.getActivities(); // Obtener la lista de actividades
         ActivityAdapter activityAdapter = new ActivityAdapter(this, activityModelArrayList); // Crear el adaptador
@@ -130,7 +133,7 @@ public class Event extends AppCompatActivity {
     }
 
     // Cargar la información del evento
-    private void loadEventData(){
+    private void loadEventData() {
         // Obtener los elementos del layout
         ImageView eventImageIV = findViewById(R.id.eventImage);
         TextView cat1TV = findViewById(R.id.cat1);
@@ -145,7 +148,7 @@ public class Event extends AppCompatActivity {
         TextView capacityTV = findViewById(R.id.capacity);
 
         // Asignar la información del evento a los elementos del layout
-        eventImageIV.setImageResource(model.getImagenSrc());
+        eventImageIV.setImageResource(R.drawable.events);
         cat1TV.setText(model.getCategorias().get(0));
         cat2TV.setText(model.getCategorias().get(1));
         cat3TV.setText(model.getCategorias().get(2));
@@ -159,48 +162,56 @@ public class Event extends AppCompatActivity {
     }
 
     // Método que se ejecuta al presionar el botón de reservar
-    public void reservar(View view){
-        // TODO: comenten esta obra arquitectonica de la ingenieria de software
-        if (singleFirebase.getCurrentUserType() == 0){
+    public void reservar(View view) {
+        // Si es un usuario
+        if (singleFirebase.getCurrentUserType() == 0) {
+            // Obtener el carnet del usuario
             String currentCarnet = singleFirebase.getCurrentUserCarnet();
             DatabaseReference myRef = singleFirebase.getMyRef();
-            if (userInscrito){
+            // Si el usuario ya está inscrito en el evento, cancelar la inscripción
+            if (userInscrito) {
+                // Se actualiza la cancelación en userEventos e inscritos
                 myRef.child("userEventos").child(currentCarnet).child(model.getEventId()).setValue(false);
                 myRef.child("inscritos").child(model.getEventId()).child(currentCarnet).setValue(false);
                 HashMap<String, Object> updates = new HashMap<>();
+
+                // Se decrementa el cupo del evento
                 updates.put("eventos/" + model.getEventId() + "/cupos", ServerValue.increment(-1));
                 myRef.updateChildren(updates);
                 model.updateCupos(-1);
                 userInscrito = false;
                 reservarBtn.setText("Reservar");
             } else {
+                // Si el usuario no está inscrito, se agrega su inscripción.
                 myRef.child("userEventos").child(currentCarnet).child(model.getEventId()).setValue(true);
                 myRef.child("inscritos").child(model.getEventId()).child(currentCarnet).setValue(true);
                 HashMap<String, Object> updates = new HashMap<>();
+
+                // Se incrementan los cupos
                 updates.put("eventos/" + model.getEventId() + "/cupos", ServerValue.increment(1));
                 myRef.updateChildren(updates);
                 model.updateCupos(1);
                 userInscrito = true;
                 reservarBtn.setText("Cancelar");
 
-                // Instanciar SendMail
+                // Instanciar SendMail, se envía correo de confirmación con QR.
                 SendMail sm = new SendMail(singleFirebase.getCurrentUserEmail(), "Reserva de evento", "Se ha reservado el evento " + model.getTitulo() + " con éxito.");
                 sm.setQRData(model.getEventId() + " " + currentCarnet);
                 sm.execute();
             }
             TextView capacityTV = findViewById(R.id.capacity);
+            // Se actualiza el texto de los cupos.
             capacityTV.setText(model.getCupos() + "/" + model.getCapacidad());
-        } else if (singleFirebase.getCurrentUserType() == 2){
-//            if (asociacionOwner){
-//                Intent intent = new Intent(this, Asistentes.class);
-//                intent.putExtra("eventId", model.getEventId());
-//                startActivity(intent);
-//            }
-            Log.d("TEST", String.valueOf(asociacionOwner));
+        } else if (singleFirebase.getCurrentUserType() == 2) {
+            // Si es una asociación, se pasa a la actividad del informe, o análisis de resultados y estadísticas.
+            Intent intent = new Intent(this, Informe.class);
+            intent.putExtra("eventId", model.getEventId());
+            startActivity(intent);
         }
     }
 
-    public void goReview(View view){
+    // Función que pasa a las encuestas y retroalimentación.
+    public void goReview(View view) {
         Intent intent = new Intent(this, Cuestionario.class);
         intent.putExtra("eventId", model.getEventId());
         startActivity(intent);

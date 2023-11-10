@@ -39,7 +39,7 @@ public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.Viewholder
         // to set data to textview and imageview of each card layout
         CollabModel model = collabModelArrayList.get(position);
 
-        holder.modImageIV.setImageResource(model.getProfileImage());
+        holder.modImageIV.setImageResource(R.drawable.no_image);
         holder.modNameTV.setText(model.getName());
         holder.jobTV.setText(model.getJob());
         holder.itemView.setOnClickListener(new View.OnClickListener() {

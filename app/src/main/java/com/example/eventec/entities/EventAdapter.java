@@ -40,7 +40,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
         // to set data to textview and imageview of each card layout
         EventModel model = eventModelArrayList.get(position);
 
-        holder.eventImageIV.setImageResource(model.getImagenSrc());
+        holder.eventImageIV.setImageResource(R.drawable.events);
         holder.eventTitleTV.setText(model.getTitulo());
         holder.dateTV.setText(model.getDate());
         holder.capacityTV.setText("" + model.getCapacidad());
