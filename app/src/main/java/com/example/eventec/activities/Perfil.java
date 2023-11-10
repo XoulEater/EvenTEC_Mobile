@@ -312,7 +312,7 @@ public class Perfil extends AppCompatActivity {
                                                         }
                                                         myRef.updateChildren(updates); // Se guardan todas las actualizaciones
                                                         // Se envía el correo de la cancelación
-                                                        // TODO: Enviar correo de cancelación
+                                                        // TODO: Enviar correo de cancelación por cada evento cancelado
                                                     }
                                                 }
                                                 Toast.makeText(Perfil.this, "Asociación eliminada", Toast.LENGTH_LONG).show();

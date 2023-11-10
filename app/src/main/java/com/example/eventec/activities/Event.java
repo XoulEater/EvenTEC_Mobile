@@ -198,6 +198,8 @@ public class Event extends AppCompatActivity {
                 SendMail sm = new SendMail(singleFirebase.getCurrentUserEmail(), "Reserva de evento", "Se ha reservado el evento " + model.getTitulo() + " con éxito.");
                 sm.setQRData(model.getEventId() + " " + currentCarnet);
                 sm.execute();
+
+                //TODO: Revisar si se llenó para enviar correo de cupos llenos.
             }
             TextView capacityTV = findViewById(R.id.capacity);
             // Se actualiza el texto de los cupos.

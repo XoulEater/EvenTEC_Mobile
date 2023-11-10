@@ -281,6 +281,8 @@ public class SingleFirebase {
                             eventNode.setValue(event); // Se sube a Firebase
                             Toast.makeText(context, "Evento creado con éxito.", Toast.LENGTH_LONG).show();
 
+                            //TODO: Notificar de creación de evento
+
                             // Se limpian los campos
                             EditText title = mainView.findViewById(R.id.editTextText);
                             EditText description = mainView.findViewById(R.id.editTextTextMultiLine);
