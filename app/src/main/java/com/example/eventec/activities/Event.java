@@ -28,9 +28,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 // Clase que muestra la información de un evento
 public class Event extends AppCompatActivity {
@@ -227,10 +231,21 @@ public class Event extends AppCompatActivity {
 
                         }
                     });
-                    Date fecha = new Date();
-                    AlertModel alertModel = new AlertModel(subject, message, fecha.toString(),   1);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeZone(TimeZone.getTimeZone("America/Costa_Rica")); // Reemplaza "America/Costa_Rica"
+                                                                                      // con tu zona horaria
+
+                    // Obtener la fecha y hora actual en tu zona horaria
+                    Date fecha = calendar.getTime();
+
+                    // Crear un SimpleDateFormat y formatear la fecha como String
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+                    String fechaString = sdf.format(fecha);
+
+                    AlertModel alertModel = new AlertModel(subject, message, fechaString, 1);
                     // subir alerta a la base de datos
-                    myRef.child("alertas").child(model.getEventId()).setValue(alertModel);
+                    String key = myRef.child("alertas").push().getKey();
+                    myRef.child("alertas").child(key).setValue(alertModel);
                 }
 
             }

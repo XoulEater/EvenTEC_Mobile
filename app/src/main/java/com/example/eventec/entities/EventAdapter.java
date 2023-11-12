@@ -43,7 +43,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
         holder.eventImageIV.setImageResource(R.drawable.events);
         holder.eventTitleTV.setText(model.getTitulo());
         holder.dateTV.setText(model.getDate());
-        holder.capacityTV.setText("" + model.getCapacidad());
+        holder.capacityTV.setText("Capacidad: " + model.getCupos() + "/" + model.getCapacidad());
         holder.asoNameTV.setText(model.getNombreAsociacion());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

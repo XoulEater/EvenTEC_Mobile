@@ -52,6 +52,31 @@ public class SingleFirebase {
     private DatabaseReference myRef; // referencia a la base de datos
 
     private MainScreen mainScreen; // referencia a la pantalla principal
+    // Define la interfaz
+
+    public interface AlertsListener {
+        void onAlertsLoaded(ArrayList<AlertModel> alertModelArrayList);
+    }
+
+    // Variable para guardar el listener
+    private AlertsListener alertsListener;
+
+    // Método para establecer el listener
+    public void setAlertsListener(AlertsListener alertsListener) {
+        this.alertsListener = alertsListener;
+    }
+
+    public interface EventsListener {
+        void onEventsLoaded(ArrayList<EventModel> eventModelArrayList);
+    }
+
+    // Variable para guardar el listener
+    private EventsListener eventsListener;
+
+    // Método para establecer el listener
+    public void setEventsListener(EventsListener eventsListener) {
+        this.eventsListener = eventsListener;
+    }
 
     // Constructor privado para evitar que se puedan crear instancias desde otras
     private SingleFirebase() {
@@ -183,6 +208,9 @@ public class SingleFirebase {
                         alertModelArrayList.add(alertModel);
                     }
                     Log.d("Firebase", alertModelArrayList.toString());
+                    if (alertsListener != null) {
+                        alertsListener.onAlertsLoaded(alertModelArrayList);
+                    }
                 }
             }
         });
@@ -259,6 +287,9 @@ public class SingleFirebase {
                         eventModelHashMap.put(eventId, eventModel);
                     }
                     Log.d("Firebase", eventModelHashMap.toString());
+                    if (eventsListener != null) {
+                        eventsListener.onEventsLoaded(eventModelArrayList);
+                    }
                 }
             }
         });

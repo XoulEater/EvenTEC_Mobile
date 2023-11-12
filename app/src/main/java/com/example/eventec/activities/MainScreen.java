@@ -65,8 +65,30 @@ public class MainScreen extends AppCompatActivity {
         ImageButton imageButton = findViewById(R.id.refresher);
         imageButton.setOnClickListener(v -> {
             // refresca los adaptadores
-            eventsDisplay.update();
-            eventsAlert.update();
+            singleFirebase.refreshAlertList();
+            singleFirebase.refreshEventList();
+        });
+
+        // refresh on page change
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    singleFirebase.refreshEventList();
+                } else if (position == 1) {
+                    singleFirebase.refreshAlertList();
+                }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // do nothing
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // do nothing
+            }
         });
 
 

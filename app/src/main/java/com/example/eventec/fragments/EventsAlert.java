@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.eventec.R;
 import com.example.eventec.entities.AlertAdapter;
@@ -18,28 +19,34 @@ import com.example.eventec.entities.SingleFirebase;
 import java.util.ArrayList;
 
 public class EventsAlert extends Fragment {
+    private AlertAdapter alertAdapter;
+    private RecyclerView eventRV;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_events_alert, container, false);
-        RecyclerView eventRV = view.findViewById(R.id.RVAlerts);
+        eventRV = view.findViewById(R.id.RVAlerts);
 
         SingleFirebase single = SingleFirebase.getInstance();
-        ArrayList<AlertModel> alertModelArrayList = single.getAlertModelArrayList();
+        single.refreshAlertList();
 
-        AlertAdapter alertAdapter = new AlertAdapter(requireContext(), alertModelArrayList);
+        single.setAlertsListener(new SingleFirebase.AlertsListener() {
+            @Override
+            public void onAlertsLoaded(ArrayList<AlertModel> alertModelArrayList) {
+                alertAdapter = new AlertAdapter(requireContext(), single.getAlertModelArrayList());
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),
-                LinearLayoutManager.VERTICAL, false);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),
+                        LinearLayoutManager.VERTICAL, false);
 
-        eventRV.setLayoutManager(linearLayoutManager);
-        eventRV.setAdapter(alertAdapter);
+                eventRV.setLayoutManager(linearLayoutManager);
+                eventRV.setAdapter(alertAdapter);
+            }
+        });
+
         return view;
     }
 
-    public void update(){
 
-    }
 
 }

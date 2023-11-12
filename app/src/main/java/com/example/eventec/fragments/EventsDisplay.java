@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.eventec.R;
+import com.example.eventec.entities.AlertAdapter;
+import com.example.eventec.entities.AlertModel;
 import com.example.eventec.entities.EventAdapter;
 import com.example.eventec.entities.EventModel;
 import com.example.eventec.entities.SingleFirebase;
@@ -20,30 +22,34 @@ import java.util.ArrayList;
 
 
 public class EventsDisplay extends Fragment {
+    private EventAdapter eventAdapter;
+    private RecyclerView eventRV;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_events_display, container, false);
-        RecyclerView eventRV = view.findViewById(R.id.RVEvents);
+        eventRV = view.findViewById(R.id.RVEvents);
 
         SingleFirebase single = SingleFirebase.getInstance();
-        ArrayList<EventModel> eventModelArrayList = single.getEventModelArrayList();
+        single.refreshEventList();
 
-        EventAdapter eventAdapter = new EventAdapter(requireContext(), eventModelArrayList);
+        single.setEventsListener(new SingleFirebase.EventsListener() {
+            @Override
+            public void onEventsLoaded(ArrayList<EventModel> eventModelArrayList) {
+                eventAdapter = new EventAdapter(requireContext(), single.getEventModelArrayList());
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),
+                        LinearLayoutManager.VERTICAL, false);
 
-        eventRV.setLayoutManager(linearLayoutManager);
-        eventRV.setAdapter(eventAdapter);
+                eventRV.setLayoutManager(linearLayoutManager);
+                eventRV.setAdapter(eventAdapter);
+            }
+        });
+
         return view;
+
     }
 
-
-    public void update() {
-        SingleFirebase single = SingleFirebase.getInstance();
-        ArrayList<EventModel> eventModelArrayList = single.getEventModelArrayList();
-        // toast tamaño de la lista
-        Toast.makeText(getContext(), "Tamaño de la lista: " + eventModelArrayList.size(), Toast.LENGTH_SHORT).show();
-    }
 
 }
