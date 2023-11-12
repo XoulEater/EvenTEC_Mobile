@@ -75,7 +75,8 @@ public class Registro extends AppCompatActivity {
         Asociacion asociacion = new Asociacion(userAso, nombreAso, carrera, password, email, phone, descripcion, miembros);
 
         // Verificar que no exista una asociacion con el mismo nombre
-        // TODO: comenten esta obra arquitectonica de la ingenieria de software
+
+        // Se revisa si la asociación ya existe.
         myRef.child("asociaciones").child(userAso).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -85,8 +86,10 @@ public class Registro extends AppCompatActivity {
                 else {
 
                     if (task.getResult().getValue() != null && ((HashMap<String, ?>) task.getResult().getValue()).get("enabled").equals(true)){
+                        // Si la asociación con ese usuario ya existe, se manda el mensaje de error.
                         Toast.makeText(Registro.this, "Ya existe una asociación con ese nombre", Toast.LENGTH_LONG).show();
                     } else {
+                        // Se leen los usuarios para verificar que los miembros estén registrados.
                         myRef.child("users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -94,6 +97,7 @@ public class Registro extends AppCompatActivity {
                                     Log.e("firebase", "Error getting data", task.getException());
                                 }
                                 else {
+                                    // Se revisa que los miembros estén registrados.
                                     boolean notExists = false;
                                     Set<String> carnetsUsers = ((HashMap<String, HashMap<?, ?>>)task.getResult().getValue()).keySet();
                                     for(String miembro : miembros){
@@ -103,8 +107,10 @@ public class Registro extends AppCompatActivity {
                                         }
                                     }
                                     if (notExists){
+                                        // Si algún miembro no existe, se manda el mensaje de error.
                                         Toast.makeText(Registro.this, "Alguno de los miembros no existe", Toast.LENGTH_LONG).show();
                                     } else {
+                                        // Se guarda la actualización y se envía a la página de Login.
                                         myRef.child("asociaciones").child(userAso).setValue(asociacion);
                                         Toast.makeText(Registro.this, "Asociación registrada", Toast.LENGTH_LONG).show();
                                         Intent siguiente = new Intent(Registro.this, Login.class);
@@ -128,7 +134,6 @@ public class Registro extends AppCompatActivity {
         User user = new User(name, carnet, password, email, phone, sede, carrera);
 
         // Verificar que no exista un usuario con el mismo carnet
-        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         myRef.child("users").child(carnet).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -136,10 +141,11 @@ public class Registro extends AppCompatActivity {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-
+                    // Se revisa que el usuario no exista.
                     if (task.getResult().getValue() != null){
                         Toast.makeText(Registro.this, "Ya existe un usuario con ese carnet", Toast.LENGTH_LONG).show();
                     } else {
+                        // Se guarda el usuario en la base de datos y se redirige a la página de login.
                         myRef.child("users").child(carnet).setValue(user);
                         Toast.makeText(Registro.this, "Usuario registrado", Toast.LENGTH_LONG).show();
                         Intent siguiente = new Intent(Registro.this, Login.class);
@@ -154,11 +160,11 @@ public class Registro extends AppCompatActivity {
     // Registrar un usuario o asociacion dependiendo del tipo de usuario
     public void registrarse(View view){
         // Obtener los datos de la interfaz
-        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         switch (currentUserType) {
             case 1:
                 break;
             case 2: // Asociacion
+                // Se leen todos los valores de los campos de texto
                 TextView nombreAsoText = findViewById(R.id.aso);
                 String nombreAso = nombreAsoText.getText().toString();
                 TextView carreraText = findViewById(R.id.carrera);
@@ -175,13 +181,15 @@ public class Registro extends AppCompatActivity {
                 String descripcion = descripcionText.getText().toString();
                 TextView miembrosText = findViewById(R.id.miembros);
                 String miembros = miembrosText.getText().toString();
-                // Toast.makeText(this, String.format("%s %s %s %s %s %s %s", nombreAso, carrera, password, email, phone, descripcion, miembros), Toast.LENGTH_LONG).show();
+
                 String[] miembrosArray = miembros.split(",");
                 List<String> miembrosList = Arrays.asList(miembrosArray);
                 if (!isValidEmail(email)){
+                    // Se valida el correo
                     Toast.makeText(this, "Correo inválido", Toast.LENGTH_LONG).show();
                     return;
                 }
+                // No puede haber algún campo vacío
                 if (nombreAso.isEmpty() || carrera.isEmpty() || password.isEmpty() || email.isEmpty() || phone.isEmpty() || descripcion.isEmpty() || miembros.isEmpty()){
                     Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_LONG).show();
                     return;
@@ -190,6 +198,7 @@ public class Registro extends AppCompatActivity {
                 }
                 break;
             default: //Estudiante
+                // Se leen todos los campos de texto.
                 TextView userText = findViewById(R.id.user);
                 String user = userText.getText().toString();
                 TextView carnetText = findViewById(R.id.carne);
@@ -204,11 +213,13 @@ public class Registro extends AppCompatActivity {
                 String sede = sedeText.getText().toString();
                 TextView carreraUserText = findViewById(R.id.carrera);
                 String carreraUser = carreraUserText.getText().toString();
-                // Toast.makeText(this, String.format("%s %s %s %s %s %s %s", nombreAso, carrera, password, email, phone, descripcion, miembros), Toast.LENGTH_LONG).show();
+
+                // Se valida que el correo sea válido y termine con estudiantec.cr
                 if (!isValidEmail(emailUser)){
                     Toast.makeText(this, "Correo inválido. Debe terminar con @estudiantec.cr", Toast.LENGTH_LONG).show();
                     return;
                 }
+                // No puede haber campos vacíos.
                 if (user.isEmpty() || carnet.isEmpty() || passwordUser.isEmpty() || emailUser.isEmpty() || phoneUser.isEmpty() || sede.isEmpty() || carreraUser.isEmpty()){
                     Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_LONG).show();
                     return;

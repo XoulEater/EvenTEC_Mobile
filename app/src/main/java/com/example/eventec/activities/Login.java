@@ -55,32 +55,42 @@ public class Login extends AppCompatActivity {
         // Dependiendo del tipo de usuario, se valida de una manera diferente
         // TODO: comenten esta obra arquitectonica de la ingenieria de software
         switch (currentUserType){
-            case 1:
+            case 1: // Si es 1 no se hace nada
                 break;
             case 2:
+                // Si es una asociación, se leen los valores de los campos de texto
                 TextView asocianameText = findViewById(R.id.asocianame); // Usuario de asociación, no display name
                 String asocianame = asocianameText.getText().toString();
                 TextView passwordText = findViewById(R.id.password);
                 String password = passwordText.getText().toString();
+
+                // Si están vacíos, se envía un mensaje
                 if (asocianame.isEmpty() || password.isEmpty()){
                     Toast.makeText(Login.this, "Llene todos los campos", Toast.LENGTH_LONG).show();
                     return;
                 }
+                // Se leen intenta leer la asociación con el usuario dado de la base de datos.
                 myRef.child("asociaciones").child (asocianame).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()){
                             DataSnapshot dataSnapshot = task.getResult();
                             if (dataSnapshot.exists()){
+                                // Si la asociación existe, está registrada
+
+                                // Si la contraseña dada es la misma que la de la asociación, y la asociación está habilitada
+                                // se inicia la sesión.
                                 if (dataSnapshot.child("password").getValue().toString().equals(password) && dataSnapshot.child("enabled").getValue().equals(true)){
                                     singleFirebase.setCurrentAsoUser(asocianame); // Guardar el usuario de la asociación
                                     singleFirebase.setCurrentAsoName(dataSnapshot.child("nombreAso").getValue().toString()); // Guardar el nombre de la asociación
                                     singleFirebase.setCurrentUserType(currentUserType); // Guardar el tipo de usuario
                                     continuar(view);
                                 } else {
+                                    // Si la contraseña es incorrecta o la asociación está deshabilitada, se envía un mensaje
                                     Toast.makeText(Login.this, "Contraseña incorrecta o asociación fue borrada", Toast.LENGTH_LONG).show();
                                 }
                             } else {
+                                // Si no se encuentra el usuario, la asocicación no existe
                                 Toast.makeText(Login.this, "Asociación no existe", Toast.LENGTH_LONG).show();
                             }
                         }
@@ -88,19 +98,27 @@ public class Login extends AppCompatActivity {
                 });
                 break;
             default:
+                // Si es un estudiante
+                // Se lee el carnet y la contraseña
                 TextView carnetText = findViewById(R.id.carnet);
                 String carnet = carnetText.getText().toString();
                 TextView passwordUserText = findViewById(R.id.password);
                 String passwordUser = passwordUserText.getText().toString();
+
+                // Si están vacíos, se envía un mensaje
                 if (carnet.isEmpty() || passwordUser.isEmpty()){
                     Toast.makeText(Login.this, "Llene todos los campos", Toast.LENGTH_LONG).show();
                     return;
                 }
+
+                // Se intenta leer el usuario con el carnet dado de la base de datos
                 myRef.child("users").child (carnet).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()){
                             DataSnapshot dataSnapshot = task.getResult();
+
+                            // Si existe el carnet, se revisa si la contraseña dada es la que está registrada
                             if (dataSnapshot.exists()){
                                 if (dataSnapshot.child("password").getValue().toString().equals(passwordUser)){
                                     singleFirebase.setCurrentUserCarnet(carnet); // Guardar el carnet del usuario
@@ -109,9 +127,11 @@ public class Login extends AppCompatActivity {
                                     singleFirebase.setCurrentUsername(dataSnapshot.child("name").getValue().toString()); // Guardar el nombre de usuario
                                     continuar(view);
                                 } else {
+                                    // Si la contraseña es incorrecta, se envía un mensaje
                                     Toast.makeText(Login.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
                                 }
                             } else {
+                                // Si no se encuentra el usuario, el carnet no existe
                                 Toast.makeText(Login.this, "Usuario no existe", Toast.LENGTH_LONG).show();
                             }
                         }

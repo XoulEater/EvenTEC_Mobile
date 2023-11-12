@@ -37,7 +37,6 @@ public class StartActivity extends AppCompatActivity {
         ivEstudiante = findViewById(R.id.imageView1);
         ivAsociacion = findViewById(R.id.imageView3);
 
-        Log.d("TEST", "" + R.drawable.events);
 //        SingleFirebase singleFirebase = SingleFirebase.getInstance();
 //        singleFirebase.refreshEventList();
 

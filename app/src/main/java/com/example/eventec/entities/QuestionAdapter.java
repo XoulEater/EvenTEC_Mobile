@@ -1,10 +1,13 @@
 package com.example.eventec.entities;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,6 +24,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Viewho
     private final Context context;
 
     private final ArrayList<QuestionModel> questionModelArrayList;
+
+    public ArrayList<QuestionModel> getQuestionModelArrayList() {
+        return questionModelArrayList;
+    }
 
     public QuestionAdapter(Context context, ArrayList<QuestionModel> questionModelArrayList) {
         this.context = context;
@@ -75,6 +82,20 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Viewho
             activityTitle = itemView.findViewById(R.id.activityTitle);
             activityQuestion = itemView.findViewById(R.id.activityQuestion);
             ratings_spinner = itemView.findViewById(R.id.ratings_spinner);
+
+            // Create an ArrayAdapter using the string array and a default spinner layout.
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                    activityQuestion.getContext(),
+                    R.array.ratings_array,
+                    android.R.layout.simple_spinner_item
+            );
+            // Specify the layout to use when the list of choices appears.
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the spinner.
+            ratings_spinner.setAdapter(adapter);
+            ratings_spinner.setSelection(2);
         }
     }
+
+
 }

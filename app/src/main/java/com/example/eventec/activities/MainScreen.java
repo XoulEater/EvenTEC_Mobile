@@ -82,8 +82,10 @@ public class MainScreen extends AppCompatActivity {
     @Override
     // Método que se encarga de manejar los eventos del menú
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // TODO: comenten esta obra arquitectonica de la ingenieria de software
         if (singleFirebase.getCurrentUserType() == 0){
+            // Si el usuario es un estudiante
+
+            // Si se selecciona la opción de cerrar sesión
             if (item.getItemId() == R.id.logout_estudiante){
                 Toast.makeText(this, "LOGOUT", Toast.LENGTH_SHORT).show();
                 singleFirebase.logout(this);
@@ -92,11 +94,15 @@ public class MainScreen extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
             }
         } else {
+            // Si el usuario es una asociación
+
+            // Se se selecciona la opción de cerrar sesión
             if (item.getItemId() == R.id.logout_asociacion){
                 Toast.makeText(this, "LOGOUT", Toast.LENGTH_SHORT).show();
                 singleFirebase.logout(this);
                 return true;
             } else if (item.getItemId() == R.id.perfil_asociacion) {
+                // si se selecciona la opción de ver el perfil, se pasa a la pagína.
                 Intent siguiente = new Intent(this, Perfil.class);
                 startActivity(siguiente);
                 return true;
