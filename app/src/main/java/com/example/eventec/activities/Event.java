@@ -17,6 +17,7 @@ import com.example.eventec.R;
 import com.example.eventec.email.SendMail;
 import com.example.eventec.entities.ActivityAdapter;
 import com.example.eventec.entities.ActivityModel;
+import com.example.eventec.entities.AlertModel;
 import com.example.eventec.entities.CollabAdapter;
 import com.example.eventec.entities.CollabModel;
 import com.example.eventec.entities.EventModel;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,29 +67,30 @@ public class Event extends AppCompatActivity {
 
             String currentCarnet = singleFirebase.getCurrentUserCarnet();
             DatabaseReference myRef = singleFirebase.getMyRef();
-            myRef.child("userEventos").child(currentCarnet).child(model.getEventId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (!task.isSuccessful()) {
-                        Log.e("firebase", "Error getting data", task.getException());
-                    } else {
-                        if (task.getResult().exists() && task.getResult().getValue().equals(true)) {
-                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                            reservarBtn.setText("Cancelar");
-                            userInscrito = true;
-                        } else {
-                            if (model.getCupos() == model.getCapacidad()) {
-                                reservarBtn.setEnabled(false);
-                                reservarBtn.setText("Cupos llenos");
+            myRef.child("userEventos").child(currentCarnet).child(model.getEventId()).get()
+                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("firebase", "Error getting data", task.getException());
                             } else {
-                                reservarBtn.setEnabled(true);
-                                reservarBtn.setText("Reservar");
+                                if (task.getResult().exists() && task.getResult().getValue().equals(true)) {
+                                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                                    reservarBtn.setText("Cancelar");
+                                    userInscrito = true;
+                                } else {
+                                    if (model.getCupos() == model.getCapacidad()) {
+                                        reservarBtn.setEnabled(false);
+                                        reservarBtn.setText("Cupos llenos");
+                                    } else {
+                                        reservarBtn.setEnabled(true);
+                                        reservarBtn.setText("Reservar");
+                                    }
+                                    userInscrito = false;
+                                }
                             }
-                            userInscrito = false;
                         }
-                    }
-                }
-            });
+                    });
         } else if (singleFirebase.getCurrentUserType() == 2) {
             TextView reviewBtn = findViewById(R.id.reviewBtn);
             reviewBtn.setVisibility(View.INVISIBLE);
@@ -195,17 +198,48 @@ public class Event extends AppCompatActivity {
                 reservarBtn.setText("Cancelar");
 
                 // Instanciar SendMail, se envía correo de confirmación con QR.
-                SendMail sm = new SendMail(singleFirebase.getCurrentUserEmail(), "Reserva de evento", "Se ha reservado el evento " + model.getTitulo() + " con éxito.");
+                SendMail sm = new SendMail(singleFirebase.getCurrentUserEmail(), "Reserva de evento",
+                        "Se ha reservado el evento " + model.getTitulo() + " con éxito.");
                 sm.setQRData(model.getEventId() + " " + currentCarnet);
-                sm.execute();
+                sm.execute(true);
 
-                //TODO: Revisar si se llenó para enviar correo de cupos llenos.
+                // TODO: Revisar si se llenó para enviar correo de cupos llenos.
+                if (model.getCupos() == model.getCapacidad()) {
+                    String subject = "Cupos llenos";
+                    String message = "Se ha llenado el cupo del evento " + model.getTitulo() + ".";
+                    myRef.child("users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("firebase", "Error getting data", task.getException());
+                            } else {
+                                // Se recorren los users
+                                HashMap<String, HashMap<?, ?>> users = (HashMap<String, HashMap<?, ?>>) task.getResult()
+                                        .getValue();
+                                for (String user : users.keySet()) {
+                                    HashMap<String, ?> userMap = (HashMap<String, ?>) users.get(user); // Se obtiene el
+                                                                                                       // user
+                                    // Se envía el correo
+                                    SendMail sendMail = new SendMail(userMap.get("email").toString(), subject, message);
+                                    sendMail.execute(false);
+                                }
+                            }
+
+                        }
+                    });
+                    Date fecha = new Date();
+                    AlertModel alertModel = new AlertModel(subject, message, fecha.toString(),   1);
+                    // subir alerta a la base de datos
+                    myRef.child("alertas").child(model.getEventId()).setValue(alertModel);
+                }
+
             }
             TextView capacityTV = findViewById(R.id.capacity);
             // Se actualiza el texto de los cupos.
             capacityTV.setText(model.getCupos() + "/" + model.getCapacidad());
         } else if (singleFirebase.getCurrentUserType() == 2) {
-            // Si es una asociación, se pasa a la actividad del informe, o análisis de resultados y estadísticas.
+            // Si es una asociación, se pasa a la actividad del informe, o análisis de
+            // resultados y estadísticas.
             Intent intent = new Intent(this, Informe.class);
             intent.putExtra("eventId", model.getEventId());
             startActivity(intent);

@@ -37,6 +37,7 @@ import java.util.Set;
 public class SingleFirebase {
     // Atributo privado para almacenar la única instancia de la clase
     private static SingleFirebase instance;
+    private ArrayList<AlertModel> alertModelArrayList; // lista de alertas
     private ArrayList<EventModel> eventModelArrayList; // lista de eventos
     private HashMap<String, EventModel> eventModelHashMap;
     private int currentUserType;
@@ -62,6 +63,7 @@ public class SingleFirebase {
         eventModelArrayList = new ArrayList<EventModel>();
         eventModelHashMap = new HashMap<String, EventModel>();
         refreshEventList();
+        refreshAlertList();
     }
 
     // Getters y setters
@@ -125,6 +127,10 @@ public class SingleFirebase {
         return eventModelArrayList;
     }
 
+    public ArrayList<AlertModel> getAlertModelArrayList() {
+        return alertModelArrayList;
+    }
+
     public FirebaseDatabase getDatabase() {
         return database;
     }
@@ -151,7 +157,36 @@ public class SingleFirebase {
         Intent siguiente = new Intent(context, StartActivity.class);
         context.startActivity(siguiente);
     }
+    public void refreshAlertList(){
+        alertModelArrayList = new ArrayList<AlertModel>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        // Se leen las alertas
+        myRef.child("alertas").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    HashMap<String, HashMap<?, ?>> alerts = (HashMap<String, HashMap<?, ?>>) task.getResult()
+                            .getValue();
+                    Set<String> alertIds = alerts.keySet();
 
+                    // Por cada alerta, se obtienen los campos y se crea un objeto AlertModel y se agrega a la lista.
+                    for (String alertId : alertIds) {
+                        String subject = alerts.get(alertId).get("subject").toString();
+                        String body = alerts.get(alertId).get("body").toString();
+                        String date = alerts.get(alertId).get("postdate").toString();
+                        int imageSrc = Integer.parseInt(alerts.get(alertId).get("alertImage").toString());
+                        AlertModel alertModel = new AlertModel(subject, body, date, imageSrc);
+                        alertModelArrayList.add(alertModel);
+                    }
+                    Log.d("Firebase", alertModelArrayList.toString());
+                }
+            }
+        });
+    }
     // descarga lista de eventos de firebase
     public void refreshEventList() {
         // descarga lista de eventos de firebase

@@ -43,7 +43,7 @@ public class SendMail {
     }
 
 
-    public void execute() {
+    public void execute(boolean isQR) {
         new AsyncTask<Void, Void, Void>() {
             @SuppressLint("StaticFieldLeak")
             @Override
@@ -75,24 +75,29 @@ public class SendMail {
                     MimeBodyPart content = new MimeBodyPart();
                     content.setText(message);
 
-                    // generate QR code
-                    Bitmap bitmap = QRCodeGenerator.generateQRCodeImage(QRData, 350, 350);
-                    // create the image part
-                    MimeBodyPart imagePart = new MimeBodyPart();
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 0 /* ignored for PNG */, bos);
-                    byte[] bitmapdata = bos.toByteArray();
-                    ByteArrayDataSource bds = new ByteArrayDataSource(bitmapdata, "image/png");
-                    imagePart.setDataHandler(new DataHandler(bds));
-                    imagePart.setHeader("Content-ID", "<image>");
+                    // Si es un QR, se agrega el QR al correo
+                    if (isQR) {
+                        // generate QR code
+                        Bitmap bitmap = QRCodeGenerator.generateQRCodeImage(QRData, 350, 350);
+                        // create the image part
+                        MimeBodyPart imagePart = new MimeBodyPart();
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /* ignored for PNG */, bos);
+                        byte[] bitmapdata = bos.toByteArray();
+                        ByteArrayDataSource bds = new ByteArrayDataSource(bitmapdata, "image/png");
+                        imagePart.setDataHandler(new DataHandler(bds));
+                        imagePart.setHeader("Content-ID", "<image>");
 
-                    // create the multipart
-                    Multipart multipart = new MimeMultipart();
-                    multipart.addBodyPart(content);
-                    multipart.addBodyPart(imagePart);
+                        // create the multipart
+                        Multipart multipart = new MimeMultipart();
+                        multipart.addBodyPart(content);
+                        multipart.addBodyPart(imagePart);
 
-                    // set the multipart as the message's content
-                    msg.setContent(multipart);
+                        // set the multipart as the message's content
+                        msg.setContent(multipart);
+                    } else {
+                        msg.setContent(message, "text/html; charset=utf-8");
+                    }
 
                     Transport.send(msg);
                 } catch (MessagingException | WriterException e) {

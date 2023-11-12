@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.eventec.R;
 import com.example.eventec.entities.EventAdapter;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 
 
 public class EventsDisplay extends Fragment {
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,6 +36,14 @@ public class EventsDisplay extends Fragment {
         eventRV.setLayoutManager(linearLayoutManager);
         eventRV.setAdapter(eventAdapter);
         return view;
+    }
+
+
+    public void update() {
+        SingleFirebase single = SingleFirebase.getInstance();
+        ArrayList<EventModel> eventModelArrayList = single.getEventModelArrayList();
+        // toast tamaño de la lista
+        Toast.makeText(getContext(), "Tamaño de la lista: " + eventModelArrayList.size(), Toast.LENGTH_SHORT).show();
     }
 
 }

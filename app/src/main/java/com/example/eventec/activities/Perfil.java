@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eventec.R;
+import com.example.eventec.email.SendMail;
+import com.example.eventec.entities.AlertModel;
 import com.example.eventec.entities.Asociacion;
 import com.example.eventec.entities.SingleFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -303,16 +306,48 @@ public class Perfil extends AppCompatActivity {
                                                         // Se llena la capacidad del evento para que nadie pueda inscribirse.
                                                         updates.put("eventos/" + eventId +"/cupos", eventoMap.get("capacidad"));
                                                         HashMap<String, ?> inscritosEvento = (HashMap<String, ?>) inscritos.get(eventId);
+
+
+
                                                         // Se desuscriben todos los inscritos al evento
                                                         for (String inscrito : inscritosEvento.keySet()){
                                                             if (inscritosEvento.get(inscrito).equals(true)){
                                                                 updates.put("userEventos/" + inscrito + "/" + eventId, false);
                                                                 updates.put("inscritos/" + eventId + "/" + inscrito, false);
+
                                                             }
                                                         }
                                                         myRef.updateChildren(updates); // Se guardan todas las actualizaciones
-                                                        // Se envía el correo de la cancelación
-                                                        // TODO: Enviar correo de cancelación por cada evento cancelado
+
+                                                        // Se define el correo de la cancelación
+                                                        String subject = "Evento cancelado";
+                                                        String message = "El evento " + eventoMap.get("titulo").toString() + " ha sido cancelado por la asociación " + eventoMap.get("nombreAsociacion").toString() + ".\n\n" +
+                                                                "Disculpe las molestias.";
+
+                                                        // Se envía el correo a todos los users
+                                                        myRef.child("users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                                if (!task.isSuccessful()) {
+                                                                    Log.e("firebase", "Error getting data", task.getException());
+                                                                }
+                                                                else {
+                                                                    // Se recorren los users
+                                                                    HashMap<String, HashMap<?, ?>> users = (HashMap<String, HashMap<?, ?>>) task.getResult().getValue();
+                                                                    for (String user : users.keySet()){
+                                                                        HashMap<String, ?> userMap = (HashMap<String, ?>) users.get(user); // Se obtiene el user
+                                                                        // Se envía el correo
+                                                                        SendMail sendMail = new SendMail(userMap.get("email").toString(), subject, message);
+                                                                        sendMail.execute(false);
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                        Date fecha = new Date();
+                                                        AlertModel alertModel = new AlertModel(subject, message, fecha.toString(),   1);
+                                                        // subir alerta a la base de datos
+                                                        myRef.child("alertas").child(eventoMap.get("eventId").toString()).setValue(alertModel);
+
                                                     }
                                                 }
                                                 Toast.makeText(Perfil.this, "Asociación eliminada", Toast.LENGTH_LONG).show();

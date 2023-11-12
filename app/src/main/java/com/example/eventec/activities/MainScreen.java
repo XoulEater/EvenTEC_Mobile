@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -52,10 +54,22 @@ public class MainScreen extends AppCompatActivity {
         // Configuración del tabLayout y del viewPager
         tabLayout.setupWithViewPager(viewPager);
         VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        vpAdapter.addFragment(new EventsDisplay(), "Inicio");
-        vpAdapter.addFragment(new EventsAlert(), "Avisos");
-        vpAdapter.addFragment(new EventsCreator(), "Crear");
+        EventsDisplay eventsDisplay = new EventsDisplay();
+        EventsAlert eventsAlert = new EventsAlert();
+        EventsCreator eventsCreator = new EventsCreator();
+        vpAdapter.addFragment(eventsDisplay, "Eventos");
+        vpAdapter.addFragment(eventsAlert, "Alertas");
+        vpAdapter.addFragment(eventsCreator, "Crear");
         viewPager.setAdapter(vpAdapter);
+
+        ImageButton imageButton = findViewById(R.id.refresher);
+        imageButton.setOnClickListener(v -> {
+            // refresca los adaptadores
+            eventsDisplay.update();
+            eventsAlert.update();
+        });
+
+
 
         // Configuración del toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);

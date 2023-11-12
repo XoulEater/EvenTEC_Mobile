@@ -68,6 +68,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
         return eventModelArrayList.size();
     }
 
+    // Actualiza la lista de eventos
+    public void updateList(ArrayList<EventModel> newList) {
+        eventModelArrayList.clear();
+        eventModelArrayList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
     // View holder class for initializing of your views such as TextView and Imageview
     public static class Viewholder extends RecyclerView.ViewHolder {
         private final ImageView eventImageIV;
