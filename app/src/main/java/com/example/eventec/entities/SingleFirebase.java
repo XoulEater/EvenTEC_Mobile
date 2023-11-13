@@ -365,7 +365,26 @@ public class SingleFirebase {
                             eventModelHashMap.put(eventId, eventModel);
                         }
                         Log.d("Firebase", eventModelHashMap.toString());
-                        // TODO: ordena la lista de eventos por fecha
+                        // ordena la lista de eventos por fecha con formato dd/mm/yy
+                        eventModelArrayList.sort((o1, o2) -> {
+                            String[] date1 = o1.getFechaInicio().split("/");
+                            String[] date2 = o2.getFechaInicio().split("/");
+                            int year1 = Integer.parseInt(date1[2]);
+                            int year2 = Integer.parseInt(date2[2]);
+                            int month1 = Integer.parseInt(date1[1]);
+                            int month2 = Integer.parseInt(date2[1]);
+                            int day1 = Integer.parseInt(date1[0]);
+                            int day2 = Integer.parseInt(date2[0]);
+                            if (year1 != year2) {
+                                return year1 - year2;
+                            } else if (month1 != month2) {
+                                return month1 - month2;
+                            } else {
+                                return day1 - day2;
+                            }
+                        });
+
+
                         if (eventsListener != null) {
                             eventsListener.onEventsLoaded(eventModelArrayList);
                         }

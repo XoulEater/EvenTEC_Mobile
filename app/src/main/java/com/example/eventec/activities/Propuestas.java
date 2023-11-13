@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.eventec.R;
 import com.example.eventec.entities.EventAdapter;
@@ -26,10 +27,14 @@ public class Propuestas extends AppCompatActivity {
 
         // Cargar las propuestas
         SingleFirebase single = SingleFirebase.getInstance();
-        propAdapter = new PropAdapter(this, single.getPropsModelArrayList());
-
+        ArrayList<EventModel> props = single.getPropsModelArrayList();
+        // Si props es vacío, no hay propuestas
+        if (props.size() == 0) {
+            Toast.makeText(this, "No hay propuestas", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        propAdapter = new PropAdapter(this, props);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
         // Configuración del RecyclerView
         propsRV.setLayoutManager(linearLayoutManager);
         propsRV.setAdapter(propAdapter); //
