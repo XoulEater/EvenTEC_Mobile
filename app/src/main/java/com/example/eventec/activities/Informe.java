@@ -97,11 +97,24 @@ public class Informe extends AppCompatActivity {
                                                                     HashMap<String, HashMap<String, Long>> ratingsMap = (HashMap<String, HashMap<String, Long>>) task.getResult().getValue();
 
                                                                     List<Comment> commentsList = new ArrayList<>();
-                                                                    // Por cada comentario, se crea un objeto comentario y se guardan en commentsList
-                                                                    for (String key : commentsMap.keySet()) {
-                                                                        HashMap<String, String> comment = commentsMap.get(key);
-                                                                        Comment commentObject = new Comment(comment.get("comment"), comment.get("eventId"), comment.get("timestamp"), comment.get("userInfo"));
+
+                                                                    if (commentsMap != null) {
+                                                                        // Por cada comentario, se crea un objeto comentario y se guardan en commentsList
+                                                                        for (String key : commentsMap.keySet()) {
+                                                                            HashMap<String, String> comment = commentsMap.get(key);
+                                                                            Comment commentObject = new Comment(comment.get("comment"), comment.get("eventId"), comment.get("timestamp"), comment.get("userInfo"));
+                                                                            commentsList.add(commentObject);
+                                                                        }
+
+                                                                        TextView cantidadComentarios = findViewById(R.id.cantidadComentarios);
+                                                                        cantidadComentarios.setText("Cantidad de comentarios: " + String.valueOf(commentsList.size()));
+                                                                    } else {
+                                                                        // Si no hay comentarios, insertamos uno con un mensaje.
+                                                                        Comment commentObject = new Comment("No hay comentarios.", eventId, "", "");
                                                                         commentsList.add(commentObject);
+
+                                                                        TextView cantidadComentarios = findViewById(R.id.cantidadComentarios);
+                                                                        cantidadComentarios.setText("Cantidad de comentarios: " + 0);
                                                                     }
 
                                                                     // Se despliegan los datos en la actividad
@@ -136,30 +149,57 @@ public class Informe extends AppCompatActivity {
                                                                     HashMap<String, Integer> carrerasCount = new HashMap<>();
                                                                     // HashMap que va a guardar los códigos de carrera y la cantidad de esa carreras
 
+                                                                    TableLayout carrerasTable = findViewById(R.id.carrerasTable);
                                                                     int leftPadding = 15;
-                                                                    // Se recorre la lista de inscritos y se agregan a la tabla de inscritos
-                                                                    for (String inscrito : inscritos.keySet()) {
-                                                                        if (inscritos.get(inscrito).toString() != "false") {
-                                                                            HashMap<String, String> user = users.get(inscrito);
-                                                                            TableRow tableRow = new TableRow(Informe.this);
-                                                                            // Fila de la tabla
+                                                                    if (inscritos != null) {
+                                                                        // Se recorre la lista de inscritos y se agregan a la tabla de inscritos
+                                                                        for (String inscrito : inscritos.keySet()) {
+                                                                            if (inscritos.get(inscrito).toString() != "false") {
+                                                                                HashMap<String, String> user = users.get(inscrito);
+                                                                                TableRow tableRow = new TableRow(Informe.this);
+                                                                                // Fila de la tabla
 
-                                                                            // Crea los TextViews para la fila de la tabla.
-                                                                            TextView nombre = new TextView(Informe.this);
-                                                                            nombre.setText(user.get("name").toString());
-                                                                            tableRow.addView(nombre);
-                                                                            nombre.setPadding(leftPadding, 0, 0, 0);
-                                                                            nombre.setBackgroundResource(R.drawable.table_border);
+                                                                                // Crea los TextViews para la fila de la tabla.
+                                                                                TextView nombre = new TextView(Informe.this);
+                                                                                nombre.setText(user.get("name").toString());
+                                                                                tableRow.addView(nombre);
+                                                                                nombre.setPadding(leftPadding, 0, 0, 0);
+                                                                                nombre.setBackgroundResource(R.drawable.table_border);
 
-                                                                            TextView telefono = new TextView(Informe.this);
-                                                                            telefono.setText(user.get("phone").toString());
-                                                                            tableRow.addView(telefono);
-                                                                            telefono.setPadding(leftPadding, 0, 0, 0);
-                                                                            telefono.setBackgroundResource(R.drawable.table_border);
+                                                                                TextView telefono = new TextView(Informe.this);
+                                                                                telefono.setText(user.get("phone").toString());
+                                                                                tableRow.addView(telefono);
+                                                                                telefono.setPadding(leftPadding, 0, 0, 0);
+                                                                                telefono.setBackgroundResource(R.drawable.table_border);
 
-                                                                            String carrera = user.get("carrera").toString();
-                                                                            carrerasCount.merge(carrera, 1, Integer::sum); // inserta la carrera o la incrementa si ya existe.
+                                                                                String carrera = user.get("carrera").toString();
+                                                                                carrerasCount.merge(carrera, 1, Integer::sum); // inserta la carrera o la incrementa si ya existe.
 
+
+                                                                                TextView carreraText = new TextView(Informe.this);
+                                                                                carreraText.setText(carrera);
+                                                                                tableRow.addView(carreraText);
+                                                                                carreraText.setPadding(leftPadding, 0, 0, 0);
+                                                                                carreraText.setBackgroundResource(R.drawable.table_border);
+
+                                                                                TextView registro = new TextView(Informe.this);
+                                                                                registro.setText(inscritos.get(inscrito).toString());
+                                                                                tableRow.addView(registro);
+                                                                                registro.setPadding(leftPadding, 0, 0, 0);
+                                                                                registro.setBackgroundResource(R.drawable.table_border);
+
+                                                                                inscritosTable.addView(tableRow);
+                                                                            } else {
+                                                                                // Si hay alguno en false, se cuenta en las cancelaciones.
+                                                                                cancelaciones++;
+                                                                            }
+                                                                        }
+
+                                                                        // Se recorrer el HashMap de carreras y se agregan a la tabla de carreras
+                                                                        for (String carrera : carrerasCount.keySet()) {
+                                                                            TableRow tableRow = new TableRow(Informe.this); // Fila de la tabla
+
+                                                                            // Se crean los textviews y se agregan a la fila de la tabla
 
                                                                             TextView carreraText = new TextView(Informe.this);
                                                                             carreraText.setText(carrera);
@@ -167,34 +207,63 @@ public class Informe extends AppCompatActivity {
                                                                             carreraText.setPadding(leftPadding, 0, 0, 0);
                                                                             carreraText.setBackgroundResource(R.drawable.table_border);
 
-                                                                            TextView registro = new TextView(Informe.this);
-                                                                            registro.setText(inscritos.get(inscrito).toString());
-                                                                            tableRow.addView(registro);
-                                                                            registro.setPadding(leftPadding, 0, 0, 0);
-                                                                            registro.setBackgroundResource(R.drawable.table_border);
+                                                                            TextView countText = new TextView(Informe.this);
+                                                                            countText.setText(String.valueOf(carrerasCount.get(carrera)));
+                                                                            tableRow.addView(countText);
+                                                                            countText.setPadding(leftPadding, 0, 0, 0);
+                                                                            countText.setBackgroundResource(R.drawable.table_border);
 
-                                                                            inscritosTable.addView(tableRow);
-                                                                        } else {
-                                                                            // Si hay alguno en false, se cuenta en las cancelaciones.
-                                                                            cancelaciones++;
+                                                                            // Se agrega la fila a la tabla.
+                                                                            carrerasTable.addView(tableRow);
                                                                         }
-                                                                    }
+                                                                        TextView cancelacionesText = findViewById(R.id.cancelaciones);
+                                                                        cancelacionesText.setText("Cantidad de cancelaciones: " + String.valueOf(cancelaciones));
+                                                                    } else {
+                                                                        // Si no hay inscritos, se agregan filas con mensajes en las tables.
 
-                                                                    // Se recorrer el HashMap de carreras y se agregan a la tabla de carreras
-                                                                    TableLayout carrerasTable = findViewById(R.id.carrerasTable);
-                                                                    for (String carrera : carrerasCount.keySet()) {
-                                                                        TableRow tableRow = new TableRow(Informe.this); // Fila de la tabla
+                                                                        TableRow tableRow = new TableRow(Informe.this);
+                                                                        // Fila de la tabla
 
-                                                                        // Se crean los textviews y se agregan a la fila de la tabla
+                                                                        // Crea los TextViews para la fila de la tabla.
+                                                                        TextView nombre = new TextView(Informe.this);
+                                                                        nombre.setText("No hay.");
+                                                                        tableRow.addView(nombre);
+                                                                        nombre.setPadding(leftPadding, 0, 0, 0);
+                                                                        nombre.setBackgroundResource(R.drawable.table_border);
+
+                                                                        TextView telefono = new TextView(Informe.this);
+                                                                        telefono.setText("");
+                                                                        tableRow.addView(telefono);
+                                                                        telefono.setPadding(leftPadding, 0, 0, 0);
+                                                                        telefono.setBackgroundResource(R.drawable.table_border);
+
 
                                                                         TextView carreraText = new TextView(Informe.this);
-                                                                        carreraText.setText(carrera);
+                                                                        carreraText.setText("");
                                                                         tableRow.addView(carreraText);
                                                                         carreraText.setPadding(leftPadding, 0, 0, 0);
                                                                         carreraText.setBackgroundResource(R.drawable.table_border);
 
+                                                                        TextView registro = new TextView(Informe.this);
+                                                                        registro.setText("");
+                                                                        tableRow.addView(registro);
+                                                                        registro.setPadding(leftPadding, 0, 0, 0);
+                                                                        registro.setBackgroundResource(R.drawable.table_border);
+
+                                                                        inscritosTable.addView(tableRow);
+
+                                                                        tableRow = new TableRow(Informe.this);
+                                                                        // Fila de la tabla
+
+                                                                        // Crea los TextViews para la fila de la tabla.
+                                                                        TextView carreraEmptyText = new TextView(Informe.this);
+                                                                        carreraEmptyText.setText("No hay.");
+                                                                        tableRow.addView(carreraEmptyText);
+                                                                        carreraEmptyText.setPadding(leftPadding, 0, 0, 0);
+                                                                        carreraEmptyText.setBackgroundResource(R.drawable.table_border);
+
                                                                         TextView countText = new TextView(Informe.this);
-                                                                        countText.setText(String.valueOf(carrerasCount.get(carrera)));
+                                                                        countText.setText("0");
                                                                         tableRow.addView(countText);
                                                                         countText.setPadding(leftPadding, 0, 0, 0);
                                                                         countText.setBackgroundResource(R.drawable.table_border);
@@ -202,41 +271,56 @@ public class Informe extends AppCompatActivity {
                                                                         // Se agrega la fila a la tabla.
                                                                         carrerasTable.addView(tableRow);
                                                                     }
-                                                                    TextView cancelacionesText = findViewById(R.id.cancelaciones);
-                                                                    cancelacionesText.setText("Cantidad de cancelaciones: " + String.valueOf(cancelaciones));
 
                                                                     TextView mainRatingLabel = findViewById(R.id.mainRatingLabel);
-                                                                    // Se calcula el rating del evento en general
-                                                                    long sumaEvento = ((HashMap<String, Long>) ratingsMap.get("Evento")).get("suma");
-                                                                    long cantidadEvento = ((HashMap<String, Long>) ratingsMap.get("Evento")).get("cantidad");
-
-                                                                    float ratingEvento = ((float) sumaEvento)/ ((float) cantidadEvento);
-                                                                    mainRatingLabel.setText("Calificación del evento: " + decimalFormat.format(ratingEvento));
-
-                                                                    TextView cantidadComentarios = findViewById(R.id.cantidadComentarios);
-                                                                    cantidadComentarios.setText("Cantidad de comentarios: " + String.valueOf(commentsList.size()));
-
                                                                     TableLayout ratingsTable = findViewById(R.id.ratingsTable);
+                                                                    // Se calcula el rating del evento en general
+                                                                    if (ratingsMap != null) {
+                                                                        long sumaEvento = ((HashMap<String, Long>) ratingsMap.get("Evento")).get("suma");
+                                                                        long cantidadEvento = ((HashMap<String, Long>) ratingsMap.get("Evento")).get("cantidad");
 
-                                                                    // Se recorre el HashMap de ratings y se agregan a la tabla de ratings
-                                                                    for (String actividadName : ratingsMap.keySet()) {
+                                                                        float ratingEvento = ((float) sumaEvento) / ((float) cantidadEvento);
+                                                                        mainRatingLabel.setText("Calificación del evento: " + decimalFormat.format(ratingEvento));
+
+
+                                                                        // Se recorre el HashMap de ratings y se agregan a la tabla de ratings
+                                                                        for (String actividadName : ratingsMap.keySet()) {
+                                                                            TableRow tableRow = new TableRow(Informe.this);
+
+                                                                            HashMap<String, Long> activdadInfo = ratingsMap.get(actividadName);
+                                                                            // Se calcula el rating a partir de la suma acumulada y la cantidad de evaluaciones.
+                                                                            long suma = activdadInfo.get("suma");
+                                                                            long cantidad = activdadInfo.get("cantidad");
+                                                                            float ratingActividad = ((float) suma) / ((float) cantidad);
+
+                                                                            // Se crean los textViews y se actualizan
+                                                                            TextView actividadNameText = new TextView(Informe.this);
+                                                                            actividadNameText.setText(actividadName);
+                                                                            actividadNameText.setPadding(leftPadding, 0, 0, 0);
+                                                                            actividadNameText.setTypeface(null, Typeface.BOLD);
+                                                                            tableRow.addView(actividadNameText);
+
+                                                                            TextView ratingActividadText = new TextView(Informe.this);
+                                                                            ratingActividadText.setText(decimalFormat.format(ratingActividad) + " con " + String.valueOf(cantidad) + " votos");
+                                                                            ratingActividadText.setPadding(leftPadding, 0, 0, 0);
+                                                                            tableRow.addView(ratingActividadText);
+
+                                                                            ratingsTable.addView(tableRow);
+                                                                        }
+                                                                    } else {
+                                                                        mainRatingLabel.setText("Calificación del evento: No disponible.");
+
                                                                         TableRow tableRow = new TableRow(Informe.this);
-
-                                                                        HashMap<String, Long> activdadInfo = ratingsMap.get(actividadName);
-                                                                        // Se calcula el rating a partir de la suma acumulada y la cantidad de evaluaciones.
-                                                                        long suma = activdadInfo.get("suma");
-                                                                        long cantidad = activdadInfo.get("cantidad");
-                                                                        float ratingActividad = ((float) suma)/((float) cantidad);
 
                                                                         // Se crean los textViews y se actualizan
                                                                         TextView actividadNameText = new TextView(Informe.this);
-                                                                        actividadNameText.setText(actividadName);
+                                                                        actividadNameText.setText("No hay calificaciones todavía");
                                                                         actividadNameText.setPadding(leftPadding, 0, 0, 0);
                                                                         actividadNameText.setTypeface(null, Typeface.BOLD);
                                                                         tableRow.addView(actividadNameText);
 
                                                                         TextView ratingActividadText = new TextView(Informe.this);
-                                                                        ratingActividadText.setText(decimalFormat.format(ratingActividad) + " con " + String.valueOf(cantidad) + " votos");
+                                                                        ratingActividadText.setText("");
                                                                         ratingActividadText.setPadding(leftPadding, 0, 0, 0);
                                                                         tableRow.addView(ratingActividadText);
 

@@ -110,6 +110,7 @@ public class Prop extends AppCompatActivity {
         TextView cat2TV = findViewById(R.id.cat2);
         TextView cat3TV = findViewById(R.id.cat3);
         TextView titleTV = findViewById(R.id.title);
+        TextView asociaNameTV = findViewById(R.id.asociaName);
         TextView descriptionTV = findViewById(R.id.description);
         TextView requirementsTV = findViewById(R.id.requirements);
         TextView lugaresTV = findViewById(R.id.lugares);
@@ -123,6 +124,7 @@ public class Prop extends AppCompatActivity {
         cat2TV.setText(model.getCategorias().get(1));
         cat3TV.setText(model.getCategorias().get(2));
         titleTV.setText(model.getTitulo());
+        asociaNameTV.setText(model.getNombreAsociacion());
         descriptionTV.setText(model.getDescripcion());
         requirementsTV.setText(model.getRequerimientos());
         lugaresTV.setText(model.getLugares());
