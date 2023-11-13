@@ -81,7 +81,7 @@
                         app:srcCompat="@drawable/studentlogoaccent" />
 
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Estudiante"
                         android:textAlignment="center"
@@ -128,7 +128,7 @@
                         app:srcCompat="@drawable/asologo" />
 
                     <TextView
-                        android:layout_width="114dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Asociación"
                         android:textAlignment="center"
