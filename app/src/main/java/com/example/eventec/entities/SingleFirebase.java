@@ -487,7 +487,9 @@ public class SingleFirebase {
                             eventModelArrayList.add(event);
                             eventModelHashMap.put(eventId, event);
                             eventNode.setValue(event); // Se sube a Firebase
-                            Toast.makeText(context, "Evento creado con éxito.", Toast.LENGTH_LONG).show();
+
+                            String text = (currentUserType == 2) ? "Evento" : "Propuesta";
+                            Toast.makeText(context, text + " creado con éxito.", Toast.LENGTH_LONG).show();
 
 
                             // Crear notificación de nuevo evento
