@@ -16,22 +16,23 @@ import com.example.eventec.entities.SingleFirebase;
 import java.util.ArrayList;
 
 public class Propuestas extends AppCompatActivity {
-    private PropAdapter propAdapter;
-    private RecyclerView propsRV;
-    private Context context = this;
+    private PropAdapter propAdapter; // Adaptador para el RecyclerView
+    private RecyclerView propsRV; // RecyclerView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_events_display);
         propsRV = findViewById(R.id.RVEvents);
 
+        // Cargar las propuestas
         SingleFirebase single = SingleFirebase.getInstance();
-        propAdapter = new PropAdapter(context, single.getPropsModelArrayList());
+        propAdapter = new PropAdapter(this, single.getPropsModelArrayList());
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
+        // Configuración del RecyclerView
         propsRV.setLayoutManager(linearLayoutManager);
-        propsRV.setAdapter(propAdapter);
+        propsRV.setAdapter(propAdapter); //
 
     }
 }

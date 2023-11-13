@@ -71,7 +71,6 @@ public class Prop extends AppCompatActivity {
         loadCollabs();
 
         // Verificar si el usuario está inscrito en el evento
-        // TODO: comenten esta obra arquitectonica de la ingenieria de software
     }
 
     // Cargar los colaboradores del evento

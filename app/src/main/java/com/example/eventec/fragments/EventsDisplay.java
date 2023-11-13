@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 
 public class EventsDisplay extends Fragment {
-    private EventAdapter eventAdapter;
-    private RecyclerView eventRV;
+    private EventAdapter eventAdapter; // Adaptador para el RecyclerView
+    private RecyclerView eventRV; // RecyclerView
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,16 +32,20 @@ public class EventsDisplay extends Fragment {
         eventRV = view.findViewById(R.id.RVEvents);
 
         SingleFirebase single = SingleFirebase.getInstance();
-        single.refreshEventList();
+        single.refreshEventList(); // Actualizar la lista de eventos
 
-        single.setEventsListener(new SingleFirebase.EventsListener() {
+        // Cargar los eventos
+        single.setEventsListener(new SingleFirebase.EventsListener() { // Listener para cuando se cargan los eventos
             @Override
+            // Función que se ejecuta cuando se cargan los eventos
             public void onEventsLoaded(ArrayList<EventModel> eventModelArrayList) {
+
                 eventAdapter = new EventAdapter(requireContext(), single.getEventModelArrayList());
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),
                         LinearLayoutManager.VERTICAL, false);
 
+                // Configuración del RecyclerView
                 eventRV.setLayoutManager(linearLayoutManager);
                 eventRV.setAdapter(eventAdapter);
             }

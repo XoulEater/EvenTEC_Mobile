@@ -24,6 +24,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -343,10 +346,15 @@ public class Perfil extends AppCompatActivity {
                                                                 }
                                                             }
                                                         });
-                                                        Date fecha = new Date();
-                                                        AlertModel alertModel = new AlertModel(subject, message, fecha.toString(),   1);
+                                                        String postdate = null;
+                                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                            postdate = ZonedDateTime.now(ZoneId.of("America/Costa_Rica"))
+                                                                    .format(DateTimeFormatter.ofPattern("dd/MM/yyy, hh:mm:ss a"));
+                                                        }
+                                                        AlertModel alertModel = new AlertModel(subject, message, postdate,   1);
                                                         // subir alerta a la base de datos
-                                                        myRef.child("alertas").child(eventoMap.get("eventId").toString()).setValue(alertModel);
+                                                        String key = myRef.child("alertas").push().getKey();
+                                                        myRef.child("alertas").child(key).setValue(alertModel);
 
                                                     }
                                                 }

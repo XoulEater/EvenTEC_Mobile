@@ -29,6 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -207,7 +210,7 @@ public class Event extends AppCompatActivity {
                 sm.setQRData(model.getEventId() + " " + currentCarnet);
                 sm.execute(true);
 
-                // TODO: Revisar si se llenó para enviar correo de cupos llenos.
+                // Revisar si se llenó para enviar correo de cupos llenos.
                 if (model.getCupos() == model.getCapacidad()) {
                     String subject = "Cupos llenos";
                     String message = "Se ha llenado el cupo del evento " + model.getTitulo() + ".";
@@ -231,18 +234,13 @@ public class Event extends AppCompatActivity {
 
                         }
                     });
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeZone(TimeZone.getTimeZone("America/Costa_Rica")); // Reemplaza "America/Costa_Rica"
-                                                                                      // con tu zona horaria
+                    String postdate = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        postdate = ZonedDateTime.now(ZoneId.of("America/Costa_Rica"))
+                                .format(DateTimeFormatter.ofPattern("dd/MM/yyy, hh:mm:ss a"));
+                    }
 
-                    // Obtener la fecha y hora actual en tu zona horaria
-                    Date fecha = calendar.getTime();
-
-                    // Crear un SimpleDateFormat y formatear la fecha como String
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-                    String fechaString = sdf.format(fecha);
-
-                    AlertModel alertModel = new AlertModel(subject, message, fechaString, 1);
+                    AlertModel alertModel = new AlertModel(subject, message, postdate, 1);
                     // subir alerta a la base de datos
                     String key = myRef.child("alertas").push().getKey();
                     myRef.child("alertas").child(key).setValue(alertModel);

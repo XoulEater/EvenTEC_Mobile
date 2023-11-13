@@ -42,8 +42,12 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.Viewholder> 
             case 1:
                 holder.alertImageIV.setImageResource(R.drawable.full);
                 break;
-            default:
+            case 2:
                 holder.alertImageIV.setImageResource(R.drawable.cancel);
+                break;
+            case 3:
+                holder.alertImageIV.setImageResource(R.drawable.new_event);
+                break;
         }
         holder.subjectTV.setText(model.getSubject());
         holder.bodyTV.setText(model.getBody());

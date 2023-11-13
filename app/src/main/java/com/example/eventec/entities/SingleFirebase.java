@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +40,12 @@ import java.util.Set;
 public class SingleFirebase {
     // Atributo privado para almacenar la única instancia de la clase
     private static SingleFirebase instance;
+
     private ArrayList<AlertModel> alertModelArrayList; // lista de alertas
     private ArrayList<EventModel> eventModelArrayList; // lista de eventos
     private ArrayList<EventModel> propsModelArrayList; // lista de propuestas
     private HashMap<String, EventModel> eventModelHashMap;
+
     private int currentUserType;
     private String currentUserCarnet;
     private String currentUsername;
@@ -49,54 +54,26 @@ public class SingleFirebase {
     private String currentAsoUser = "N/A";
 
     private FirebaseDatabase database; // instancia de la base de datos
-
     private DatabaseReference myRef; // referencia a la base de datos
-
     private MainScreen mainScreen; // referencia a la pantalla principal
-
-    public ArrayList<EventModel> getPropsModelArrayList() {
-        return propsModelArrayList;
-    }
-
-
-    // Define la interfaz
-
-    public interface AlertsListener {
-        void onAlertsLoaded(ArrayList<AlertModel> alertModelArrayList);
-    }
-
-    // Variable para guardar el listener
-    private AlertsListener alertsListener;
-
-    // Método para establecer el listener
-    public void setAlertsListener(AlertsListener alertsListener) {
-        this.alertsListener = alertsListener;
-    }
-
-    public interface EventsListener {
-        void onEventsLoaded(ArrayList<EventModel> eventModelArrayList);
-    }
-
-    // Variable para guardar el listener
-    private EventsListener eventsListener;
-
-    // Método para establecer el listener
-    public void setEventsListener(EventsListener eventsListener) {
-        this.eventsListener = eventsListener;
-    }
 
     // Constructor privado para evitar que se puedan crear instancias desde otras
     private SingleFirebase() {
         currentUserCarnet = null;
         currentUserType = 1;
-        currentAsoName = null;
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
-        eventModelArrayList = new ArrayList<EventModel>();
-        eventModelHashMap = new HashMap<String, EventModel>();
         refreshEventList();
         refreshAlertList();
         refreshPropsList();
+    }
+    public static SingleFirebase getInstance() {
+        // Método para obtener la instancia única de la clase.
+        if (instance == null) {
+            instance = new SingleFirebase();
+
+        }
+        return instance;
     }
 
     // Getters y setters
@@ -148,14 +125,6 @@ public class SingleFirebase {
         this.currentAsoUser = currentAsoUser;
     }
 
-    public MainScreen getMainScreen() {
-        return mainScreen;
-    }
-
-    public void setMainScreen(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
-    }
-
     public ArrayList<EventModel> getEventModelArrayList() {
         return eventModelArrayList;
     }
@@ -164,21 +133,37 @@ public class SingleFirebase {
         return alertModelArrayList;
     }
 
-    public FirebaseDatabase getDatabase() {
-        return database;
-    }
-
     public DatabaseReference getMyRef() {
         return myRef;
     }
 
-    public static SingleFirebase getInstance() {
-        // Método para obtener la instancia única de la clase.
-        if (instance == null) {
-            instance = new SingleFirebase();
+    public ArrayList<EventModel> getPropsModelArrayList() {
+        return propsModelArrayList;
+    }
 
-        }
-        return instance;
+    // Listeners
+    public interface AlertsListener { // Listener para cuando se carguen las alertas
+        void onAlertsLoaded(ArrayList<AlertModel> alertModelArrayList);
+    }
+
+    // Variable para guardar el listener
+    private AlertsListener alertsListener;
+
+    // Método para establecer el listener
+    public void setAlertsListener(AlertsListener alertsListener) {
+        this.alertsListener = alertsListener;
+    }
+
+    public interface EventsListener { // Listener para cuando se carguen los eventos
+        void onEventsLoaded(ArrayList<EventModel> eventModelArrayList);
+    }
+
+    // Variable para guardar el listener
+    private EventsListener eventsListener;
+
+    // Método para establecer el listener
+    public void setEventsListener(EventsListener eventsListener) {
+        this.eventsListener = eventsListener;
     }
 
     // método para cerrar sesión
@@ -190,6 +175,8 @@ public class SingleFirebase {
         Intent siguiente = new Intent(context, StartActivity.class);
         context.startActivity(siguiente);
     }
+
+    // Descarga lista de propuestas de firebase
     public void refreshPropsList() {
         propsModelArrayList = new ArrayList<EventModel>();
 
@@ -265,6 +252,8 @@ public class SingleFirebase {
             }
         });
     }
+
+    // Descarga lista de alertas de firebase
     public void refreshAlertList(){
         alertModelArrayList = new ArrayList<AlertModel>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -298,7 +287,8 @@ public class SingleFirebase {
             }
         });
     }
-    // descarga lista de eventos de firebase
+
+    // Descarga lista de eventos de firebase
     public void refreshEventList() {
         // descarga lista de eventos de firebase
         eventModelArrayList = new ArrayList<EventModel>();
@@ -379,7 +369,7 @@ public class SingleFirebase {
         });
     }
 
-    // carga lista de eventos de firebase
+    // Carga lista de eventos de firebase
     public void uploadEvent(View mainView, Context context, String titulo, int capacidad, int imagenSrc,
             List<String> categorias, String descripcion, String requerimientos, String fechaInicio, String fechaFin,
             String lugares, List<ActivityModel> activities, List<CollabModel> colabs) {
@@ -415,9 +405,9 @@ public class SingleFirebase {
                             // Si todos existen, se crea el evento.
                             // Se revisa si el que lo crea es una asociación. Si es una asociación, es un evento.
                             // Si es un estudiante, es una propuesta.
-                            String path = (currentUserType == 1) ? "eventos" : "propuestas";
-                            String displayName = (currentUserType == 1) ? currentAsoName : currentUsername;
-                            String currentUser = (currentUserType == 1) ? currentAsoUser : currentUserCarnet;
+                            String path = (currentUserType == 2) ? "eventos" : "propuestas";
+                            String displayName = (currentUserType == 2) ? currentAsoName : currentUsername;
+                            String currentUser = (currentUserType == 2) ? currentAsoUser : currentUserCarnet;
 
                             DatabaseReference eventNode = myRef.child(path).push();
 
@@ -431,7 +421,22 @@ public class SingleFirebase {
                             eventNode.setValue(event); // Se sube a Firebase
                             Toast.makeText(context, "Evento creado con éxito.", Toast.LENGTH_LONG).show();
 
-                            //TODO: Notificar de creación de evento
+
+                            // Crear notificación de nuevo evento
+                            if (currentUserType == 2) {
+                                String subject = "Nuevo evento creado";
+                                String body = "Se ha creado un nuevo evento: " + titulo;
+                                // fecha actual
+                                String postdate = null;
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                    postdate = ZonedDateTime.now(ZoneId.of("America/Costa_Rica"))
+                                            .format(DateTimeFormatter.ofPattern("dd/MM/yyy, hh:mm:ss a"));
+                                }
+                                int imageSrc = 3;
+                                AlertModel alertModel = new AlertModel(subject, body, postdate, imageSrc);
+                                String key = myRef.child("alertas").push().getKey();
+                                myRef.child("alertas").child(key).setValue(alertModel);
+                            }
 
                             // Se limpian los campos
                             EditText title = mainView.findViewById(R.id.editTextText);
@@ -463,7 +468,7 @@ public class SingleFirebase {
         }
     }
 
-    // incrementa el numero de clicks de un evento
+    // Incrementa el numero de clicks de un evento
     public void incrementarClicksEvento(EventModel event) {
         Map<String, Object> updates = new HashMap<>();
         updates.put("eventos/" + event.getEventId() + "/clicks", ServerValue.increment(1));
