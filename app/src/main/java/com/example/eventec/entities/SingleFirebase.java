@@ -189,64 +189,66 @@ public class SingleFirebase {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    HashMap<String, HashMap<?, ?>> events = (HashMap<String, HashMap<?, ?>>) task.getResult()
-                            .getValue();
-                    Set<String> eventIds = events.keySet();
+                    if (task.getResult().exists()){
+                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                        HashMap<String, HashMap<?, ?>> events = (HashMap<String, HashMap<?, ?>>) task.getResult()
+                                .getValue();
+                        Set<String> eventIds = events.keySet();
 
-                    // Por cada propuesta, se obtienen los campos y se crea un objeto EventModel y se agrega a la lista y el hashmap.
-                    for (String eventId : eventIds) {
-                        HashMap<?, ?> event = events.get(eventId);
-                        String titulo = event.get("titulo").toString();
-                        String nombreAsociacion = event.get("nombreAsociacion").toString();
-                        int capacidad = Integer.parseInt(event.get("capacidad").toString());
-                        int imagenSrc = Integer.parseInt(event.get("imagenSrc").toString());
-                        List<String> categorias = (List<String>) event.get("categorias");
-                        String date = event.get("date").toString();
-                        String descripcion = event.get("descripcion").toString();
-                        String requerimientos = event.get("requerimientos").toString();
-                        String fechaInicio = event.get("fechaInicio").toString();
-                        String fechaFin = event.get("fechaFin").toString();
-                        String lugares = event.get("lugares").toString();
-                        int clicks = Integer.parseInt(event.get("clicks").toString());
-                        int cupos = Integer.parseInt(event.get("cupos").toString());
-                        String userAsociacion = event.get("userAsociacion").toString();
-                        List<HashMap<String, ?>> activitiesList = (List<HashMap<String, ?>>) event.get("activities");
-                        List<HashMap<String, ?>> colabsList = (List<HashMap<String, ?>>) event.get("colabs");
-                        List<ActivityModel> activities = new ArrayList<ActivityModel>();
-                        List<CollabModel> colabs = new ArrayList<CollabModel>();
-                        ActivityModel activity;
+                        // Por cada propuesta, se obtienen los campos y se crea un objeto EventModel y se agrega a la lista y el hashmap.
+                        for (String eventId : eventIds) {
+                            HashMap<?, ?> event = events.get(eventId);
+                            String titulo = event.get("titulo").toString();
+                            String nombreAsociacion = event.get("nombreAsociacion").toString();
+                            int capacidad = Integer.parseInt(event.get("capacidad").toString());
+                            int imagenSrc = Integer.parseInt(event.get("imagenSrc").toString());
+                            List<String> categorias = (List<String>) event.get("categorias");
+                            String date = event.get("date").toString();
+                            String descripcion = event.get("descripcion").toString();
+                            String requerimientos = event.get("requerimientos").toString();
+                            String fechaInicio = event.get("fechaInicio").toString();
+                            String fechaFin = event.get("fechaFin").toString();
+                            String lugares = event.get("lugares").toString();
+                            int clicks = Integer.parseInt(event.get("clicks").toString());
+                            int cupos = Integer.parseInt(event.get("cupos").toString());
+                            String userAsociacion = event.get("userAsociacion").toString();
+                            List<HashMap<String, ?>> activitiesList = (List<HashMap<String, ?>>) event.get("activities");
+                            List<HashMap<String, ?>> colabsList = (List<HashMap<String, ?>>) event.get("colabs");
+                            List<ActivityModel> activities = new ArrayList<ActivityModel>();
+                            List<CollabModel> colabs = new ArrayList<CollabModel>();
+                            ActivityModel activity;
 
-                        // Por cada actividad, se crea un objeto nuevo
-                        for (HashMap<String, ?> activityMap : activitiesList) {
-                            String dateActivity = activityMap.get("date").toString();
-                            String time = activityMap.get("time").toString();
-                            String title = activityMap.get("title").toString();
-                            String moder = activityMap.get("moder").toString();
-                            activity = new ActivityModel(dateActivity, time, title, moder);
-                            activities.add(activity);
+                            // Por cada actividad, se crea un objeto nuevo
+                            for (HashMap<String, ?> activityMap : activitiesList) {
+                                String dateActivity = activityMap.get("date").toString();
+                                String time = activityMap.get("time").toString();
+                                String title = activityMap.get("title").toString();
+                                String moder = activityMap.get("moder").toString();
+                                activity = new ActivityModel(dateActivity, time, title, moder);
+                                activities.add(activity);
 
+                            }
+
+                            // Por cada colaborador, se crea un objeto nuevo.
+                            CollabModel collab;
+                            for (HashMap<String, ?> colabMap : colabsList) {
+                                String job = colabMap.get("job").toString();
+                                String name = colabMap.get("name").toString();
+                                Integer profileImage = Integer.parseInt(colabMap.get("profileImage").toString());
+                                collab = new CollabModel(name, job, profileImage);
+                                colabs.add(collab);
+                            }
+
+                            EventModel eventModel = new EventModel(eventId, titulo, date, nombreAsociacion, capacidad,
+                                    imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares,
+                                    activities, colabs, clicks, cupos, userAsociacion);
+
+                            propsModelArrayList.add(eventModel);
                         }
-
-                        // Por cada colaborador, se crea un objeto nuevo.
-                        CollabModel collab;
-                        for (HashMap<String, ?> colabMap : colabsList) {
-                            String job = colabMap.get("job").toString();
-                            String name = colabMap.get("name").toString();
-                            Integer profileImage = Integer.parseInt(colabMap.get("profileImage").toString());
-                            collab = new CollabModel(name, job, profileImage);
-                            colabs.add(collab);
+                        Log.d("Firebase", eventModelArrayList.toString());
+                        if (eventsListener != null) {
+                            eventsListener.onEventsLoaded(propsModelArrayList);
                         }
-
-                        EventModel eventModel = new EventModel(eventId, titulo, date, nombreAsociacion, capacidad,
-                                imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares,
-                                activities, colabs, clicks, cupos, userAsociacion);
-
-                        propsModelArrayList.add(eventModel);
-                    }
-                    Log.d("Firebase", eventModelArrayList.toString());
-                    if (eventsListener != null) {
-                        eventsListener.onEventsLoaded(propsModelArrayList);
                     }
                 }
             }
@@ -265,23 +267,25 @@ public class SingleFirebase {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    HashMap<String, HashMap<?, ?>> alerts = (HashMap<String, HashMap<?, ?>>) task.getResult()
-                            .getValue();
-                    Set<String> alertIds = alerts.keySet();
+                    if (task.getResult().exists()){
+                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                        HashMap<String, HashMap<?, ?>> alerts = (HashMap<String, HashMap<?, ?>>) task.getResult()
+                                .getValue();
+                        Set<String> alertIds = alerts.keySet();
 
-                    // Por cada alerta, se obtienen los campos y se crea un objeto AlertModel y se agrega a la lista.
-                    for (String alertId : alertIds) {
-                        String subject = alerts.get(alertId).get("subject").toString();
-                        String body = alerts.get(alertId).get("body").toString();
-                        String date = alerts.get(alertId).get("postdate").toString();
-                        int imageSrc = Integer.parseInt(alerts.get(alertId).get("alertImage").toString());
-                        AlertModel alertModel = new AlertModel(subject, body, date, imageSrc);
-                        alertModelArrayList.add(alertModel);
-                    }
-                    Log.d("Firebase", alertModelArrayList.toString());
-                    if (alertsListener != null) {
-                        alertsListener.onAlertsLoaded(alertModelArrayList);
+                        // Por cada alerta, se obtienen los campos y se crea un objeto AlertModel y se agrega a la lista.
+                        for (String alertId : alertIds) {
+                            String subject = alerts.get(alertId).get("subject").toString();
+                            String body = alerts.get(alertId).get("body").toString();
+                            String date = alerts.get(alertId).get("postdate").toString();
+                            int imageSrc = Integer.parseInt(alerts.get(alertId).get("alertImage").toString());
+                            AlertModel alertModel = new AlertModel(subject, body, date, imageSrc);
+                            alertModelArrayList.add(alertModel);
+                        }
+                        Log.d("Firebase", alertModelArrayList.toString());
+                        if (alertsListener != null) {
+                            alertsListener.onAlertsLoaded(alertModelArrayList);
+                        }
                     }
                 }
             }
@@ -303,66 +307,68 @@ public class SingleFirebase {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    HashMap<String, HashMap<?, ?>> events = (HashMap<String, HashMap<?, ?>>) task.getResult()
-                            .getValue();
-                    Set<String> eventIds = events.keySet();
+                    if (task.getResult().exists()){
+                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                        HashMap<String, HashMap<?, ?>> events = (HashMap<String, HashMap<?, ?>>) task.getResult()
+                                .getValue();
+                        Set<String> eventIds = events.keySet();
 
-                    // Por cada evento, se obtienen los campos y se crea un objeto EventModel y se agrega a la lista y el hashmap.
-                    for (String eventId : eventIds) {
-                        HashMap<?, ?> event = events.get(eventId);
-                        String titulo = event.get("titulo").toString();
+                        // Por cada evento, se obtienen los campos y se crea un objeto EventModel y se agrega a la lista y el hashmap.
+                        for (String eventId : eventIds) {
+                            HashMap<?, ?> event = events.get(eventId);
+                            String titulo = event.get("titulo").toString();
 
-                        String nombreAsociacion = event.get("nombreAsociacion").toString();
-                        int capacidad = Integer.parseInt(event.get("capacidad").toString());
-                        int imagenSrc = Integer.parseInt(event.get("imagenSrc").toString());
-                        List<String> categorias = (List<String>) event.get("categorias");
-                        String date = event.get("date").toString();
-                        String descripcion = event.get("descripcion").toString();
-                        String requerimientos = event.get("requerimientos").toString();
-                        String fechaInicio = event.get("fechaInicio").toString();
-                        String fechaFin = event.get("fechaFin").toString();
-                        String lugares = event.get("lugares").toString();
-                        int clicks = Integer.parseInt(event.get("clicks").toString());
-                        int cupos = Integer.parseInt(event.get("cupos").toString());
-                        String userAsociacion = event.get("userAsociacion").toString();
-                        List<HashMap<String, ?>> activitiesList = (List<HashMap<String, ?>>) event.get("activities");
-                        List<HashMap<String, ?>> colabsList = (List<HashMap<String, ?>>) event.get("colabs");
-                        List<ActivityModel> activities = new ArrayList<ActivityModel>();
-                        List<CollabModel> colabs = new ArrayList<CollabModel>();
-                        ActivityModel activity;
+                            String nombreAsociacion = event.get("nombreAsociacion").toString();
+                            int capacidad = Integer.parseInt(event.get("capacidad").toString());
+                            int imagenSrc = Integer.parseInt(event.get("imagenSrc").toString());
+                            List<String> categorias = (List<String>) event.get("categorias");
+                            String date = event.get("date").toString();
+                            String descripcion = event.get("descripcion").toString();
+                            String requerimientos = event.get("requerimientos").toString();
+                            String fechaInicio = event.get("fechaInicio").toString();
+                            String fechaFin = event.get("fechaFin").toString();
+                            String lugares = event.get("lugares").toString();
+                            int clicks = Integer.parseInt(event.get("clicks").toString());
+                            int cupos = Integer.parseInt(event.get("cupos").toString());
+                            String userAsociacion = event.get("userAsociacion").toString();
+                            List<HashMap<String, ?>> activitiesList = (List<HashMap<String, ?>>) event.get("activities");
+                            List<HashMap<String, ?>> colabsList = (List<HashMap<String, ?>>) event.get("colabs");
+                            List<ActivityModel> activities = new ArrayList<ActivityModel>();
+                            List<CollabModel> colabs = new ArrayList<CollabModel>();
+                            ActivityModel activity;
 
-                        // Por cada actividad, se crea un objeto nuevo
-                        for (HashMap<String, ?> activityMap : activitiesList) {
-                            String dateActivity = activityMap.get("date").toString();
-                            String time = activityMap.get("time").toString();
-                            String title = activityMap.get("title").toString();
-                            String moder = activityMap.get("moder").toString();
-                            activity = new ActivityModel(dateActivity, time, title, moder);
-                            activities.add(activity);
+                            // Por cada actividad, se crea un objeto nuevo
+                            for (HashMap<String, ?> activityMap : activitiesList) {
+                                String dateActivity = activityMap.get("date").toString();
+                                String time = activityMap.get("time").toString();
+                                String title = activityMap.get("title").toString();
+                                String moder = activityMap.get("moder").toString();
+                                activity = new ActivityModel(dateActivity, time, title, moder);
+                                activities.add(activity);
 
+                            }
+
+                            // Por cada colaborador, se crea un objeto nuevo.
+                            CollabModel collab;
+                            for (HashMap<String, ?> colabMap : colabsList) {
+                                String job = colabMap.get("job").toString();
+                                String name = colabMap.get("name").toString();
+                                Integer profileImage = Integer.parseInt(colabMap.get("profileImage").toString());
+                                collab = new CollabModel(name, job, profileImage);
+                                colabs.add(collab);
+                            }
+
+                            EventModel eventModel = new EventModel(eventId, titulo, date, nombreAsociacion, capacidad,
+                                    imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares,
+                                    activities, colabs, clicks, cupos, userAsociacion);
+                            eventModelArrayList.add(eventModel);
+                            eventModelHashMap.put(eventId, eventModel);
                         }
-
-                        // Por cada colaborador, se crea un objeto nuevo.
-                        CollabModel collab;
-                        for (HashMap<String, ?> colabMap : colabsList) {
-                            String job = colabMap.get("job").toString();
-                            String name = colabMap.get("name").toString();
-                            Integer profileImage = Integer.parseInt(colabMap.get("profileImage").toString());
-                            collab = new CollabModel(name, job, profileImage);
-                            colabs.add(collab);
+                        Log.d("Firebase", eventModelHashMap.toString());
+                        // TODO: ordena la lista de eventos por fecha
+                        if (eventsListener != null) {
+                            eventsListener.onEventsLoaded(eventModelArrayList);
                         }
-
-                        EventModel eventModel = new EventModel(eventId, titulo, date, nombreAsociacion, capacidad,
-                                imagenSrc, categorias, descripcion, requerimientos, fechaInicio, fechaFin, lugares,
-                                activities, colabs, clicks, cupos, userAsociacion);
-                        eventModelArrayList.add(eventModel);
-                        eventModelHashMap.put(eventId, eventModel);
-                    }
-                    Log.d("Firebase", eventModelHashMap.toString());
-                    // TODO: ordena la lista de eventos por fecha
-                    if (eventsListener != null) {
-                        eventsListener.onEventsLoaded(eventModelArrayList);
                     }
                 }
             }
