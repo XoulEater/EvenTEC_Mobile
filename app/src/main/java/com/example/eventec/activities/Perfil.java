@@ -281,6 +281,11 @@ public class Perfil extends AppCompatActivity {
                                 else {
                                     // Cuando se borra una asociación se deben cancelar todos los eventos que esa asociación había creado.
                                     HashMap<String, HashMap<?, ?>> eventos = (HashMap<String, HashMap<?, ?>>) task.getResult().getValue();
+                                    if (eventos == null){
+                                        Toast.makeText(Perfil.this, "Asociación eliminada", Toast.LENGTH_LONG).show();
+                                        singleFirebase.logout(Perfil.this);
+                                        return;
+                                    }
                                     myRef.child("inscritos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -288,6 +293,11 @@ public class Perfil extends AppCompatActivity {
                                                 Log.e("firebase", "Error getting data", task.getException());
                                             }
                                             else {
+                                                if (!task.getResult().exists()) {
+                                                    Toast.makeText(Perfil.this, "Asociación eliminada", Toast.LENGTH_LONG).show();
+                                                    singleFirebase.logout(Perfil.this);
+                                                    return;
+                                                }
                                                 // Se leen los inscritos a los eventos.
                                                 HashMap<String, HashMap<?, ?>> inscritos = (HashMap<String, HashMap<?, ?>>) task.getResult().getValue();
 
