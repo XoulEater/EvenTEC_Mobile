@@ -67,6 +67,7 @@ public class MainScreen extends AppCompatActivity {
             // refresca los adaptadores
             singleFirebase.refreshAlertList();
             singleFirebase.refreshEventList();
+            singleFirebase.refreshPropsList();
         });
 
         // refresh on page change
