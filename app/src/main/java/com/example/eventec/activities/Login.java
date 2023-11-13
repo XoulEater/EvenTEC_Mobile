@@ -112,7 +112,7 @@ public class Login extends AppCompatActivity {
                 }
 
                 // Se intenta leer el usuario con el carnet dado de la base de datos
-                myRef.child("users").child (carnet).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                myRef.child("users").child(carnet).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()){
