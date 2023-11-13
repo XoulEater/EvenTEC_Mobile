@@ -13,30 +13,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventec.R;
 import com.example.eventec.activities.Event;
+import com.example.eventec.activities.Prop;
 
 import java.util.ArrayList;
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> {
+public class PropAdapter extends RecyclerView.Adapter<PropAdapter.Viewholder> {
 
     private final Context context;
     private final ArrayList<EventModel> eventModelArrayList;
 
     // Constructor
-    public EventAdapter(Context context, ArrayList<EventModel> eventModelArrayList) {
+    public PropAdapter(Context context, ArrayList<EventModel> eventModelArrayList) {
         this.context = context;
         this.eventModelArrayList = eventModelArrayList;
     }
 
     @NonNull
     @Override
-    public EventAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PropAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // to inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_layout, parent, false);
         return new Viewholder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventAdapter.Viewholder holder, int position) {
+    public void onBindViewHolder(@NonNull PropAdapter.Viewholder holder, int position) {
         // to set data to textview and imageview of each card layout
         EventModel model = eventModelArrayList.get(position);
 
@@ -49,7 +50,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Viewholder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Event.class);
+                Intent intent = new Intent(context, Prop.class);
 
                 // Pasa los datos del evento a la actividad EventActivity
                 intent.putExtra("index", position);

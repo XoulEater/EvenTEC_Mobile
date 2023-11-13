@@ -25,7 +25,7 @@ import java.util.Properties;
 
 import com.google.zxing.WriterException;
 
-
+// https://www.journaldev.com/2532/javamail-example-send-mail-in-java-smtp
 public class SendMail {
     private String toEmail;
     private String subject;

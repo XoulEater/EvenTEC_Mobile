@@ -133,7 +133,7 @@ public class MainScreen extends AppCompatActivity {
             // Si el usuario es una asociación
 
             // Se se selecciona la opción de cerrar sesión
-            if (item.getItemId() == R.id.logout_asociacion){
+            if (item.getItemId() == R.id.logout_asociacion) {
                 Toast.makeText(this, "LOGOUT", Toast.LENGTH_SHORT).show();
                 singleFirebase.logout(this);
                 return true;
@@ -142,10 +142,15 @@ public class MainScreen extends AppCompatActivity {
                 Intent siguiente = new Intent(this, Perfil.class);
                 startActivity(siguiente);
                 return true;
+            } else if (item.getItemId() == R.id.propuestas) {
+                // si se selecciona la opción de ver el propuestas, se pasa a la pagína.
+                Intent siguiente = new Intent(this, Propuestas.class);
+                startActivity(siguiente);
             } else {
                 return super.onOptionsItemSelected(item);
             }
         }
+        return false;
     }
 
     // Método que se encarga de colorear la palabra EvenTEC

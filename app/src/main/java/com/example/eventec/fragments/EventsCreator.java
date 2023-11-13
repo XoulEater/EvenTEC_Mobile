@@ -181,14 +181,11 @@ public class EventsCreator extends Fragment {
                     int capacidad = Integer.parseInt(capacity.getText().toString());
                     String lugares = places.getText().toString();
                     SingleFirebase singleFirebase = SingleFirebase.getInstance();
-                    String asociacionName = singleFirebase.getCurrentAsoName();
-
 
                     // Upload event to Firebase
                     if (!titulo.isEmpty() && !descripcion.isEmpty() && !requisitos.isEmpty() && !categorias.isEmpty() &&
                             !fechaInicio.isEmpty() && !fechaFin.isEmpty() && !lugares.isEmpty() && !activities.isEmpty()
-                            && !collabs.isEmpty() && !asociacionName.isEmpty()
-                            && imagen > 0 && capacidad > 0) {
+                            && !collabs.isEmpty() && capacidad > 0) {
                         singleFirebase.uploadEvent(mainView, getContext(),titulo, capacidad, imagen, categorias, descripcion, requisitos, fechaInicio, fechaFin, lugares, activities, collabs);
                     } else {
                         Toast.makeText(getContext(), "Llene todos los campos", Toast.LENGTH_LONG).show();

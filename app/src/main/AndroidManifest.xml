@@ -13,6 +13,12 @@
         android:theme="@style/Theme.EvenTEC"
         tools:targetApi="31">
         <activity
+            android:name=".activities.Propuestas"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Prop"
+            android:exported="false" />
+        <activity
             android:name=".activities.Informe"
             android:exported="false" />
         <activity
