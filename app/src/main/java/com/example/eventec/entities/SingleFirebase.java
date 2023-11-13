@@ -283,6 +283,49 @@ public class SingleFirebase {
                             alertModelArrayList.add(alertModel);
                         }
                         Log.d("Firebase", alertModelArrayList.toString());
+                        // ordena la lista de alertas por fecha con formato dd/MM/yyyy, hh:mm:ss a
+                        alertModelArrayList.sort((o1, o2) -> {
+                            String[] date1 = o1.getPostdate().split(",")[0].split("/");
+                            String[] date2 = o2.getPostdate().split(",")[0].split("/");
+                            String[] time1 = o1.getPostdate().split(",")[1].trim().split(":");
+                            String[] time2 = o2.getPostdate().split(",")[1].trim().split(":");
+                            int year1 = Integer.parseInt(date1[2]);
+                            int year2 = Integer.parseInt(date2[2]);
+                            int month1 = Integer.parseInt(date1[1]);
+                            int month2 = Integer.parseInt(date2[1]);
+                            int day1 = Integer.parseInt(date1[0]);
+                            int day2 = Integer.parseInt(date2[0]);
+                            int hour1 = Integer.parseInt(time1[0]);
+                            int hour2 = Integer.parseInt(time2[0]);
+                            int minute1 = Integer.parseInt(time1[1]);
+                            int minute2 = Integer.parseInt(time2[1]);
+                            int second1 = Integer.parseInt(time1[2].split(" ")[0]);
+                            int second2 = Integer.parseInt(time2[2].split(" ")[0]);
+                            int a1 = (time1[2].split(" ")[1].equals("a.")) ? 0 : 1;
+                            int a2 = (time2[2].split(" ")[1].equals("a.")) ? 0 : 1;
+                            if (year1 != year2) {
+                                return year1 - year2;
+                            } else if (month1 != month2) {
+                                return month1 - month2;
+                            } else if (day1 != day2) {
+                                return day1 - day2;
+                            } else if (a1 != a2) {
+                                return a1 - a2;
+                            } else if (hour1 != hour2) {
+                                return hour1 - hour2;
+                            } else if (minute1 != minute2) {
+                                return minute1 - minute2;
+                            } else {
+                                return second1 - second2;
+                            }
+                        });
+                        // revierte la lista para que la alerta más reciente esté de primera
+                        ArrayList<AlertModel> reversedAlerts = new ArrayList<AlertModel>();
+                        for (int i = alertModelArrayList.size() - 1; i >= 0; i--) {
+                            reversedAlerts.add(alertModelArrayList.get(i));
+                        }
+                        alertModelArrayList = reversedAlerts;
+
                         if (alertsListener != null) {
                             alertsListener.onAlertsLoaded(alertModelArrayList);
                         }
