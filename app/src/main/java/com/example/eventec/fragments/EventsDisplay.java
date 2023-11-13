@@ -39,8 +39,13 @@ public class EventsDisplay extends Fragment {
             @Override
             // Función que se ejecuta cuando se cargan los eventos
             public void onEventsLoaded(ArrayList<EventModel> eventModelArrayList) {
-
-                eventAdapter = new EventAdapter(requireContext(), single.getEventModelArrayList());
+                ArrayList<EventModel> events = single.getEventModelArrayList();
+                // si single.getEventModelArrayList() es vacío, no hay eventos
+                if (events.size() == 0) {
+                    Toast.makeText(requireContext(), "No hay eventos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                eventAdapter = new EventAdapter(requireContext(), events);
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),
                         LinearLayoutManager.VERTICAL, false);

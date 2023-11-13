@@ -24,7 +24,7 @@ public class EventModel {
 
     public void formatDate(String fecha){
         String[] parts = fecha.split("/");
-        String day = parts[2];
+        String day = parts[0];
         String month = parts[1];
         switch(month){
             case "01":

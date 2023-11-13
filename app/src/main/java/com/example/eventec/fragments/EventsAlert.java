@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.eventec.R;
 import com.example.eventec.entities.AlertAdapter;
@@ -36,7 +37,13 @@ public class EventsAlert extends Fragment {
             @Override
             // Se ejecuta cuando se cargan los datos
             public void onAlertsLoaded(ArrayList<AlertModel> alertModelArrayList) {
-                alertAdapter = new AlertAdapter(requireContext(), single.getAlertModelArrayList());
+                ArrayList<AlertModel> alerts = single.getAlertModelArrayList();
+                // Si no hay alertas
+                if (alerts.size() == 0) {
+                    Toast.makeText(requireContext(), "No hay alertas", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                alertAdapter = new AlertAdapter(requireContext(), alerts);
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),
                         LinearLayoutManager.VERTICAL, false);
